@@ -19,7 +19,9 @@ from django.urls import path
 from cuerpo_proyecto import views
 
 urlpatterns = [
-    path('login/', views.login, name='login'),
+    path('register/', views.register, name='register'),
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('product/', views.product, name='product'),
+    path('login/', views.login_view, name='login'),
 ]
