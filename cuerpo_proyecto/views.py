@@ -40,4 +40,7 @@ def login_view(request):
         else:
             auth_login(request, user)
             return redirect('product')
-
+        
+def agregar_producto(request):
+    # Lógica para manejar la solicitud del formulario
+    return render(request, 'agregar_producto.html')

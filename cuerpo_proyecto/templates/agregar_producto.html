@@ -1,0 +1,54 @@
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Productos</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Agregar Producto</h1>
+    </header>
+    <main>
+        <form id="agregar-producto-form">
+            <label for="codigo">Código:</label>
+            <input type="text" id="codigo" name="codigo" required>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" required>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+            <label for="categoria">Categoría:</label>
+            <input type="text" id="categoria" name="categoria" required>
+
+            <label for="precio-unitario">Precio Unitario:</label>
+            <input type="number" id="precio-unitario" name="precio-unitario" step="0.01" required>
+
+            <label for="costo-unitario">Costo Unitario:</label>
+            <input type="number" id="costo-unitario" name="costo-unitario" step="0.01" required>
+
+            <div class="form-buttons">
+                <button type="submit">Ingresar</button>
+                <button type="button" onclick="cancelar()">Cancelar</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        function cancelar() {
+            if (confirm('¿Estás seguro de que deseas cancelar? Todos los datos se perderán.')) {
+                window.location.href = 'product.html'; // Redirige a la página principal o donde desees
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+{% endblock %}
