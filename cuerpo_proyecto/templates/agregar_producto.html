@@ -1,5 +1,3 @@
-
-
 {% block content %}
 <!DOCTYPE html>
 <html lang="es">
@@ -13,12 +11,15 @@
 </head>
 <body>
     <header>
-        <h1>Agregar Producto</h1>
+        <h1>Ingresar Producto</h1>
     </header>
     <main>
         <form id="agregar-producto-form">
             <label for="codigo">Código:</label>
-            <input type="text" id="codigo" name="codigo" required>
+            <div class="codigo-container">
+                <input type="text" id="codigo" name="codigo" required>
+                <button type="button" id="generar-codigo" onclick="generarCodigo()">Generar Código</button>
+            </div>
 
             <label for="cantidad">Cantidad:</label>
             <input type="number" id="cantidad" name="cantidad" required>
@@ -41,31 +42,10 @@
             </div>
         </form>
     </main>
-
-
     <script>
-        function cancelar() {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Todos los datos se perderán.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, cancelar',
-                cancelButtonText: 'No',
-                customClass: {
-                    container: 'custom-swal' // Aplica la clase personalizada
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{% url 'product' %}";  // Redirigir correctamente
-                }
-            })
-        }
+        const redirectUrl = "{% url 'product' %}";  // Aquí Django generará la URL correctamente
     </script>
+    <script src="/static/js/agregar-producto.js"></script>
 </body>
 </html>
-
-
 {% endblock %}
