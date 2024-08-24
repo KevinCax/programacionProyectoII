@@ -17,14 +17,12 @@ def register(request):
                     request.POST["username"], password=request.POST["password1"])
                 user.save()
                 auth_login(request, user)
-                return redirect('product')
+                return redirect('login')
             except IntegrityError:
                 return render(request, 'register.html', {"form": UserCreationForm, "error": "Usuario ya existe."})
         else:
             return render(request, 'register.html', {"form": UserCreationForm, "error": "Contraseña no coincide."})
 
-def product(request):
-    return render(request, 'product.html', {"product": "Producto de ejemplo"})
 
 def login_view(request):
     if request.method == 'GET':
@@ -40,6 +38,9 @@ def login_view(request):
         else:
             auth_login(request, user)
             return redirect('product')
+        
+def product(request):
+    return render(request, 'product.html', {"product": "Producto de ejemplo"})
         
 def agregar_producto(request):
     # Lógica para manejar la solicitud del formulario

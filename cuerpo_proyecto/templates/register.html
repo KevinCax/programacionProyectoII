@@ -9,7 +9,8 @@
     {% csrf_token %}
     {{form.as_p}}
     <button>
-        login
+        Registrarse
     </button>
 </form>
+<p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Iniciar Sesion</a></p>
 {% endblock %}

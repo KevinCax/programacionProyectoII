@@ -24,6 +24,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('product/', views.product, name='product'),
     path('login/', views.login_view, name='login'),
-    path('agregar_producto/', views.agregar_producto, name='agregar_producto'),
+    path('agregar-producto/', views.agregar_producto, name='agregar_producto'),
     
 ]
