@@ -14,7 +14,8 @@
         <h1>Ingresar Producto</h1>
     </header>
     <main>
-        <form id="agregar-producto-form">
+        <form id="agregar-producto-form" method="POST" onsubmit="event.preventDefault(); guardarProducto();" >
+            {% csrf_token %}
             <label for="codigo">Código:</label>
             <div class="codigo-container">
                 <input type="text" id="codigo" name="codigo" required>
@@ -44,8 +45,11 @@
     </main>
     <script>
         const redirectUrl = "{% url 'product' %}";  // Aquí Django generará la URL correctamente
+        const redirectUrls ="{% url 'agregar_producto' %}";
     </script>
     <script src="/static/js/agregar-producto.js"></script>
+    <script src="/static/js/guardar_producto.js"></script>
+
 </body>
 </html>
 {% endblock %}
