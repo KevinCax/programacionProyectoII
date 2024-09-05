@@ -1,0 +1,89 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f5f7fa;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #4a90e2;
+}
+
+main {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ocupa todo el ancho disponible */
+    height: 100%; /* Ocupa todo el alto disponible */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ocupa el 100% del contenedor */
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    flex-grow: 1; /* Permite que los elementos se expandan */
+}
+
+textarea {
+    resize: none;
+    flex-grow: 2; /* Hace que el área de texto sea más grande */
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#generar-codigo {
+    background-color: #ff6b6b;
+    margin-left: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+button[type="submit"] {
+    background-color: #4a90e2;
+}
+
+button[type="button"] {
+    background-color: #ff6b6b;
+}
+
+button:hover {
+    opacity: 0.9;
+}
