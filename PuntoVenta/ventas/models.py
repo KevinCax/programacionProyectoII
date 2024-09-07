@@ -3,11 +3,13 @@ from django.forms import model_to_dict #Transforma a JSON un modelo
 
 # Create your models here.
 class Cliente(models.Model):
-    codigo = models.CharField(max_length=200, unique=True, null=True, blank=True)
-    nit = models.CharField(max_length=200, unique=True, null=False, blank=False)
-    cui = models.CharField(max_length=200, unique=True, null=False, blank=False)
+    codigo = models.CharField(max_length=50, unique=True, null=False, blank=True, default='0')
+    nitOCui = models.CharField(max_length=200, unique=True, null=False, blank=False)
     nombre = models.CharField(max_length=200, null=True, blank=True)
-    telefono = models.CharField(max_length=200, null=True, blank=True)
+    correoElectronico = models.EmailField(max_length=200, null=True, blank=True)
+    direccion = models.CharField(max_length=200, null=True, blank=True)
+    estado = models.BooleanField(default=True)
+    notas = models.TextField(blank=True, null=True)
     create = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now_add=True)
     
@@ -17,9 +19,10 @@ class Cliente(models.Model):
         
     def __str__(self):
         return self.nombre
+
     
 class Producto(models.Model):
-    codigo = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    codigo = models.CharField(max_length=255, unique=True, null=False, blank=True)
     cantidad = models.DecimalField(max_digits=15, decimal_places=2, null=True)
     descripcion = models.CharField(max_length=255, unique=True, null=False)
     imagen = models.ImageField(upload_to='productos', null=True, blank=True)

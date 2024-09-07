@@ -119,10 +119,12 @@
                     <tr>
                         <th># ID</th>
                         <th>Código</th>
-                        <th>Nit</th>
-                        <th>Cui</th>
+                        <th>Nit / Cui</th>
                         <th>Nombre</th>
-                        <th>Telefono</th>
+                        <th>Correo Electrónico</th>
+                        <th>Dirección</th>
+                        <th>Estado</th>
+                        <th>Notas</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -131,10 +133,12 @@
                     <tr>
                         <td>{{i.id}}</td>
                         <td>{{i.codigo}}</td>
-                        <td>{{i.nit}}</td>
-                        <td>{{i.cui}}</td>
+                        <td>{{i.nitOCui}}</td>
                         <td>{{i.nombre}}</td>
-                        <td>{{i.telefono}}</td>
+                        <td>{{i.correoElectronico}}</td>
+                        <td>{{i.direccion}}</td>
+                        <td>{{i.estado}}</td>
+                        <td>{{i.notas}}</td>
                         <td>
                             <button onclick="editarPersonal('{{i.id}}','{{i.codigo}}', '{{i.nit}}', '{{i.cui}}', '{{i.nombre}}', '{{i.telefono}}')" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
                                 <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">

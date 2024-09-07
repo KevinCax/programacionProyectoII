@@ -2,8 +2,8 @@ from django.contrib import admin
 from ventas.models import Cliente, Producto
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nit', 'cui', 'nombre', 'telefono')
-    search_fields = ['nombre']
+    list_display = ('codigo', 'nombre', 'nitOCui', 'correoElectronico', 'direccion', 'estado')
+    search_fields = ['nombre', 'nitOCui']
     readonly_fields = ('create', 'update')
     filter_horizontal = ()
     list_filter = ()

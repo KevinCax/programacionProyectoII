@@ -4,34 +4,34 @@ from ventas.models import Cliente, Producto
 class AddClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ('codigo', 'nit', 'cui', 'nombre', 'telefono')
+        fields = ('codigo', 'nitOCui', 'nombre', 'correoElectronico', 'direccion', 'notas')
         labels = {
             'codigo': 'Codigo cliente: ',
-            'nit': 'Nit cliente: ',
-            'cui': 'Cui cliente: ',
-            'nombre': 'Nombre cliente: ',
-            'telefono': 'Telefono : ',
+            'nitOCui': 'Nit o Cui: ',
+            'nombre': 'Nombre : ',
+            'correoElectronico': 'Correo Electrónico: ',
+            'direccion': 'Dirección: ',
+            'notas': 'Notas: ',
+            'estado': 'Estado: ',
         }
         
         
 class EditarClienteForm(forms.ModelForm):
      class Meta:
         model = Cliente
-        fields = ('codigo', 'nit', 'cui', 'nombre', 'telefono')
+        fields = ('nombre','correoElectronico','direccion','notas')
         labels = {
-            'codigo': 'Codigo cliente: ',
-            'nit': 'Nit cliente: ',
-            'cui': 'Cui cliente: ',
-            'nombre': 'Nombre cliente: ',
-            'telefono': 'Telefono : ',
+            'nombre': 'Nombre : ',
+            'correoElectronico': 'Correo Electrónico: ',
+            'direccion': 'Dirección: ',
+            'notas': 'Notas: ',
+            'estado': 'Estado: ',
         }
         widgets = {
-            'codigo': forms.TextInput(attrs={'type': 'text', 'id': 'codigo_editar'}),
-            'nit': forms.TextInput(attrs={'id': 'nit_editar'}),
-            'cui': forms.TextInput(attrs={'id': 'cui_editar'}),
-            'nombre': forms.TextInput(attrs={'id': 'nombre_editar'}),
-            'telefono': forms.TextInput(attrs={'id': 'telefono_editar'}),
-            
+            'nombre': forms.TextInput(attrs={'type': 'text', 'id': 'nombre_editar'}),
+            'correoElectronico': forms.TextInput(attrs={'id': 'correo_editar'}),
+            'direccion': forms.TextInput(attrs={'id': 'direccion_editar'}), 
+            'notas': forms.TextInput(attrs={'id': 'notas_editar'}),
         }
         
         
