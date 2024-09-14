@@ -47,9 +47,10 @@ class EditarClienteForm(forms.ModelForm):
             'correoElectronico': 'Correo Electrónico: ',
             'direccion': 'Dirección: ',
             'notas': 'Notas: ',
+            
         }
         widgets = {
-            'nombre': forms.TextInput(attrs={'type': 'text', 'id': 'nombre_editar'}),
+            'nombre': forms.TextInput(attrs={'type': 'text' , 'id': 'nombre_editar'}),
             'correoElectronico': forms.TextInput(attrs={'id': 'correo_editar'}),
             'direccion': forms.TextInput(attrs={'id': 'direccion_editar'}), 
             'notas': forms.TextInput(attrs={'id': 'notas_editar'}),
