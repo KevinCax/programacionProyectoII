@@ -94,13 +94,15 @@ function eliminarProducto(id) {
   document.getElementById("id_producto_eliminar").value = id;
 }
 
-function editarPersonal(id, codigo, nit, cui, nombre, telefono) {
-  document.getElementById("id_personal_editar").value = id;
-  document.getElementById("codigo_editar").value = codigo;
-  document.getElementById("nit_editar").value = nit;
-  document.getElementById("cui_editar").value = cui;
+function editarPersonal(nombre, correoElectronico, direccion, notas, estado) {
   document.getElementById("nombre_editar").value = nombre;
-  document.getElementById("telefono_editar").value = telefono;
+  document.getElementById("correo_editar'").value = correoElectronico;
+  document.getElementById("direccion_editar").value = direccion;
+  document.getElementById("notas_editar").value = notas;
+
+  // Alterna el estado del checkbox
+  var estadoCheckbox = document.getElementById("estado_editar");
+  estadoCheckbox.checked = (estado === true || estado === 'true' || estado === 1 || estado === '1');
 }
 
 

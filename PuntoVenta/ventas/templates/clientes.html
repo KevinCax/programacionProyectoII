@@ -63,6 +63,10 @@
                     {% for error in form.non_field_errors %}
                     <p class="alarma">{{error}}</p>
                     {% endfor %}
+                    <p>
+                        <label for="estado_editar">Estado:</label>
+                        <input type="checkbox" id="estado_editar" name="estado_editar">
+                    </p>
             </div>
             <div class="modal-footer bg-dark text-white">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -133,7 +137,7 @@
                     <tr>
                         <td>{{i.id}}</td>
                         <td>{{i.codigo}}</td>
-                        <td>{{i.nitOCui}}</td>
+                        <td>{{i.nit_Cui}}</td>
                         <td>{{i.nombre}}</td>
                         <td>{{i.correoElectronico}}</td>
                         <td>{{i.direccion}}</td>

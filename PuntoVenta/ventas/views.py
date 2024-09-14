@@ -34,89 +34,109 @@ def clientes_view(request):
 
 def add_cliente_view(request):
     if request.method == 'POST':
-        form = AddClienteForm(request.POST, request.FILES)
+        form = AddClienteForm(request.POST)
         
         if form.is_valid():
-            # Extraer el NIT del formulario
-            nit = form.cleaned_data.get('nit')
-            
-            # Validar el NIT
-            if not validar_nit(nit):
-                messages.error(request, "NIT inválido")
+            nit_Cui_dpi = form.cleaned_data.get('nit_Cui')
+
+            nit_Cui_dpi_sin_guiones = nit_Cui_dpi.replace("-", "")
+            if len(nit_Cui_dpi_sin_guiones) == 13:
+                if not validar_dpi(nit_Cui_dpi_sin_guiones):
+                    messages.error(request, "DPI inválido")
+                    return redirect('Clientes')
+            elif len(nit_Cui_dpi_sin_guiones) >= 8 and len(nit_Cui_dpi_sin_guiones) <= 10:
+                if not validar_nit(nit_Cui_dpi_sin_guiones):
+                    messages.error(request, "NIT inválido")
+                    return redirect('Clientes')
+            else:
+                messages.error(request, "Formato de NIT/DPI no válido")
                 return redirect('Clientes')
-            
+
             try:
                 form.save()
                 messages.success(request, "Cliente guardado con éxito")
-                
             except Exception as e:
                 messages.error(request, f"Error al guardar el cliente: {str(e)}")
                 return redirect('Clientes')
-        
         else:
-            messages.error(request, "Usuario ya existe")
+            messages.error(request, "Datos ingresados no válidos.")
     
     return redirect('Clientes')
 
 
 def validar_nit(nit):
-    '''Funcion para validar NIT'''
-    # Elimina espacios en blanco
-    nit_n = nit.replace(' ', '')
-    # Elimina el guion del nit
-    nit_ok = nit_n.replace('-', '')
-    # Base para multiplicar
-    base = 1
+    '''Función para validar NIT'''
+    nit = nit.replace('-', '').replace(' ', '')  # Elimina guiones y espacios
 
-    # Guarda el digito validador, el ultimo
-    dig_validador = nit_ok[-1]
-
-    # Guarda el resto de numeros para sumar
-    dig_nit = list(nit_ok[0:-1])
-
-    # Reverse invierte el orden de los digitos del original
-    # El array inverso se refleja al original
-    dig_nit_rev = dig_nit.reverse()  # None
+    if len(nit) < 8 or len(nit) > 10:
+        return False  # Longitud no válida para NIT
 
     try:
+        # El último dígito del NIT es el dígito verificador
+        digito_verificador = int(nit[-1])
+        # Los dígitos restantes son los que se usan para la validación
+        numeros = list(map(int, nit[:-1]))
+
         suma = 0
-        # Por cada numero del nit en inversa
-        for n in dig_nit:
-            base += 1
-            suma += int(n) * base
+        multiplicador = 2
+        for digito in reversed(numeros):
+            suma += digito * multiplicador
+            multiplicador = 9 if multiplicador == 2 else 2
 
-        # Guarda el residuo
-        resultado = suma % 11
-        comprobacion = 11 - resultado
+        residuo = suma % 11
+        digito_calculado = (11 - residuo) % 11
 
-        if suma >= 11:
-            resultado = suma % 11
-            comprobacion = 11 - resultado
-
-        if comprobacion == 10:
-            if dig_validador.upper() == 'K':
-                return True
-
-        elif comprobacion == int(dig_validador):
-            return True
-
+        if digito_calculado == 10:
+            digito_calculado = 'K'
         else:
-            return False
+            digito_calculado = str(digito_calculado)
 
-    except:
+        return digito_calculado == str(digito_verificador)
+    except ValueError:
         return False
+
     
+def validar_dpi(dpi):
+    '''Función para validar DPI'''
+    dpi = dpi.replace('-', '').replace(' ', '')  # Elimina guiones y espacios
+
+    if len(dpi) != 13:
+        return False  # Longitud no válida para DPI
+
+    try:
+        # Los primeros 12 dígitos son el número del DPI, el último dígito es el dígito verificador
+        digito_verificador = int(dpi[-1])
+        numeros = list(map(int, dpi[:-1]))
+
+        suma = 0
+        multiplicador = 2
+        for digito in reversed(numeros):
+            suma += digito * multiplicador
+            multiplicador = 1 if multiplicador == 2 else 2
+
+        residuo = suma % 10
+        digito_calculado = (10 - residuo) % 10
+
+        return digito_calculado == digito_verificador
+    except ValueError:
+        return False
+
 
 def edit_cliente_view(request):
     if request.method == 'POST':
         cliente = Cliente.objects.get(pk=request.POST.get('id_personal_editar'))
-        # Pasa la instancia del cliente, no la clase 'Cliente'
         form = EditarClienteForm(request.POST, request.FILES, instance=cliente)
-        # Asegúrate de que estás llamando al método is_valid()
+        
         if form.is_valid():
-            form.save()
+            estado = request.POST.get('estado_editar') == 'on'
+            cliente.estado = estado
+            cliente.save()
+            messages.success(request, "Cliente actualizado con éxito")
+        else:
+            messages.error(request, "Formulario no válido. Verifica los datos ingresados.")
     
     return redirect('Clientes')
+
 
 
 def delete_cliente_view(request):
@@ -124,7 +144,6 @@ def delete_cliente_view(request):
         cliente = Cliente.objects.get(pk=request.POST.get('id_personal_eliminar'))
         cliente.delete()
     return redirect('Clientes')
-
 
 
 #Vistas de Productos
@@ -156,6 +175,7 @@ def add_producto_view(request):
                 messages(request, "Error al guardar el producto")
                 return redirect('Productos')
     return redirect('Productos')
+
 
 
 # Vista Venta

@@ -4,7 +4,7 @@ from django.forms import model_to_dict #Transforma a JSON un modelo
 # Create your models here.
 class Cliente(models.Model):
     codigo = models.CharField(max_length=50, unique=True, null=False, blank=True, default='0')
-    nitOCui = models.CharField(max_length=200, unique=True, null=False, blank=False)
+    nit_Cui = models.CharField(max_length=200, unique=True, null=False, blank=False)
     nombre = models.CharField(max_length=200, null=True, blank=True)
     correoElectronico = models.EmailField(max_length=200, null=True, blank=True)
     direccion = models.CharField(max_length=200, null=True, blank=True)
