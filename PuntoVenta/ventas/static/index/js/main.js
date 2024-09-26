@@ -4,7 +4,7 @@
   });*/
 
 
-function eliminarEquipo(id) {
+/*function eliminarEquipo(id) {
   document.getElementById("id_equipo_eliminar").value = id;
 }
 
@@ -21,7 +21,7 @@ function editarEquipo(id, area, codigo, descripcion) {
   document.getElementById("area_editar").value = area;
   document.getElementById("codigo_editar").value = codigo;
   document.getElementById("descripcion_editar").value = descripcion;
-}
+}*/
 
 function editarProduct(id, precio, descripcion, costo, cantidad, categoria, servicio) {
   document.getElementById("id_producto_editar").value = id;
@@ -35,7 +35,7 @@ function editarProduct(id, precio, descripcion, costo, cantidad, categoria, serv
   }
 }
 
-function historialPreventivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
+/*function historialPreventivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
   
   document.getElementById("hist_preventivo_editar").value = id;
   document.getElementById("hist_solicitadoh").value = solicitadoh;
@@ -55,9 +55,9 @@ function editarPreventivo(id, fecha, contacto, piezas, actividades, comentarios,
   document.getElementById("comentarios_editar").value = comentarios;
   document.getElementById("piezas_editar").value = piezas;
   document.getElementById("total_editar").value = total;
-}
+}*/
 
-function editarCorrectivo(id, equipo, fecha, solicitado, estado, responsable, actividades, subtotalmo, supervisado, falla) {
+/*function editarCorrectivo(id, equipo, fecha, solicitado, estado, responsable, actividades, subtotalmo, supervisado, falla) {
   
   document.getElementById("id_correctivo_editar").value = id;
   document.getElementById("equipo_editar").value = equipo;
@@ -73,9 +73,9 @@ function editarCorrectivo(id, equipo, fecha, solicitado, estado, responsable, ac
 
 function eliminarCorrectivo(id) {
   document.getElementById("id_correctivo_eliminar").value = id;
-}
+}*/
 
-function historialCorrectivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
+/*function historialCorrectivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
   
   document.getElementById("hist_correctivo_editar").value = id;
   document.getElementById("hist_solicitadoh").value = solicitadoh;
@@ -88,7 +88,7 @@ function historialCorrectivo(id,solicitadoh,supervisado,responsable, subtotalpie
 
 function eliminarPreventivo(id) {
   document.getElementById("id_preventivo_eliminar").value = id;
-}
+}*/
 
 function eliminarProducto(id) {
   document.getElementById("id_producto_eliminar").value = id;
@@ -97,7 +97,7 @@ function eliminarProducto(id) {
 function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado) {
   document.getElementById("id_personal_editar").value = id;
   document.getElementById("nombre_editar").value = nombre;
-  document.getElementById("correo_editar'").value = correoElectronico;
+  document.getElementById("correo_editar").value = correoElectronico;
   document.getElementById("direccion_editar").value = direccion;
   document.getElementById("notas_editar").value = notas;
 
@@ -116,10 +116,10 @@ function borrarContent(){
   document.getElementById("search").value = "";
 }
 
-function seleccionarCliente(id, nombre){
+/*function seleccionarCliente(id, nombre){
  document.getElementById("id_cliente").value = id;
  document.getElementById("cliente").value = nombre;
-}
+}*/
 
 function activarEspera(){
   const btn = document.getElementById("btn");

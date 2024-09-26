@@ -5,9 +5,8 @@ from django.core.exceptions import ValidationError
 class AddClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ('codigo', 'nit_Cui', 'nombre', 'correoElectronico', 'direccion', 'notas' , 'estado')
+        fields = ('nit_Cui', 'nombre', 'correoElectronico', 'direccion', 'notas' , 'estado')
         labels = {
-            'codigo': 'Codigo cliente: ',
             'nit_Cui': 'Nit o Cui: ',
             'nombre': 'Nombre : ',
             'correoElectronico': 'Correo Electrónico: ',

@@ -10,6 +10,8 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+ /*
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -272,6 +274,7 @@ button,
 [type="reset"],
 [type="submit"] {
   -webkit-appearance: button;
+  appearance: button;
 }
 
 button:not(:disabled),
@@ -331,6 +334,7 @@ progress {
 [type="search"] {
   outline-offset: -2px;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 [type="search"]::-webkit-search-decoration {
@@ -44200,6 +44204,9 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
   * @author Mattia Larentis <mattia@larentis.eu> (http://larentis.eu)
   * @license MIT
   */
+
+
+  /*
 .bootstrap-switch {
   border: 1px solid #ced4da;
   border-radius: 0.25rem;

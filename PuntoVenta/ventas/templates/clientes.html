@@ -11,7 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-
 <div id="AgregarPersonalModal" class="modal" style="overflow: scroll;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -23,6 +22,7 @@
                     {% for field in form_personal %}
                     <p>{{field.label}} <br>
                         {{field|add_class:"form-control text-dark"}}</p>
+                        
                     {% for error in field.errors %}
                     <p class="alarma">{{error}}</p>
                     {% endfor %}
@@ -44,6 +44,7 @@
     </div>
 </div>
 
+
 <div id="EditarPersonalModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -52,7 +53,8 @@
             </div>
             <div class="modal-body bg-dark text-white">
                 <form method="POST" action="{% url 'EditCliente' %}" enctype="multipart/form-data">{% csrf_token %}
-                    <input type="hidden" id="id_personal_editar" value="{{ cliente.id }}">
+                    <!--<input type="hidden" id="id_personal_editar" value="{{ cliente.nit_Cui }}">-->
+                    <input type="hidden" name="id_personal_editar" id="id_personal_editar">
                     {% for field in form_editar %}
                     <p> {{field.label}} <br>
                         {{field|add_class:"form-control"}}</p>
@@ -67,6 +69,7 @@
                         <label for="estado_editar">Estado:</label>
                         <input type="checkbox" id="estado_editar" name="estado_editar">
                     </p>
+                    
             </div>
             <div class="modal-footer bg-dark text-white">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -121,8 +124,8 @@
             <table class="table table-hover table-primary" id="myTable">
                 <thead>
                     <tr>
-                        <th># ID</th>
-                        <th>Código</th>
+                        <th>#</th>
+                        
                         <th>Nit / Cui</th>
                         <th>Nombre</th>
                         <th>Correo Electrónico</th>
@@ -135,8 +138,7 @@
                 <tbody class="text-dark">
                     {% for i in clientes %}
                     <tr>
-                        <td>{{i.id}}</td>
-                        <td>{{i.codigo}}</td>
+                        <td>{{forloop.counter}}</td>
                         <td>{{i.nit_Cui}}</td>
                         <td>{{i.nombre}}</td>
                         <td>{{i.correoElectronico}}</td>
@@ -144,7 +146,7 @@
                         <td>{{i.estado}}</td>
                         <td>{{i.notas}}</td>
                         <td>
-                            <button onclick="editarPersonal('{{i.id}}', '{{i.nombre}}', '{{i.correoElectronico}}', '{{i.direccion}}', '{{i.estado}}', '{{i.notas}}')" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
+                            <button onclick="editarPersonal('{{ i.nit_Cui }}' ,'{{i.nombre}}', '{{i.correoElectronico}}', '{{i.direccion}}', '{{i.estado}}', '{{i.notas}}')" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
                                 <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
                             </button>                            
 

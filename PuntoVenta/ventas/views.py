@@ -29,7 +29,7 @@ def clientes_view(request):
         'form_personal': form_personal,
         'form_editar': form_editar
     }
-    return render(request, 'clientes.html', context)
+    return render(request, 'clientes.html', {'clientes': clientes, 'form_personal': form_personal, 'form_editar': form_editar})
 
 
 def add_cliente_view(request):
@@ -56,12 +56,44 @@ def add_cliente_view(request):
                 form.save()
                 messages.success(request, "Cliente guardado con éxito")
             except Exception as e:
-                messages.error(request, f"Error al guardar el cliente: {str(e)}")
+                messages.error(request, f"Datos inválidos o ya registrados. ")
                 return redirect('Clientes')
         else:
-            messages.error(request, "Datos ingresados no válidos.")
+            messages.error(request, "Datos ingresados invalidos o formato incorrecto .")
     
     return redirect('Clientes')
+
+def edit_cliente_view(request):
+    if request.method == 'POST':
+        nit_cui_editar = request.POST.get('id_personal_editar')  # Cambié el nombre aquí para reflejar lo que estás enviando
+        print(f"NIT/CI recibido: {nit_cui_editar}")  # Verificar que se reciba correctamente
+
+        # Verificar que el ID esté presente y sea válido
+        if nit_cui_editar:
+            try:
+                cliente = Cliente.objects.get(pk=nit_cui_editar)
+            except Cliente.DoesNotExist:
+                messages.error(request, "Cliente no encontrado.")
+                return redirect('Clientes')
+
+            # Cargar el formulario con los datos del cliente a editar
+            form = EditarClienteForm(request.POST, request.FILES, instance=cliente)
+
+            if form.is_valid():
+                # Actualizar los campos del cliente
+                estado = request.POST.get('estado_editar') == 'on'
+                cliente.estado = estado
+                form.save()  # Utilizamos form.save() para actualizar el resto de los campos
+                messages.success(request, "Cliente actualizado con éxito")
+            else:
+                messages.error(request, "Datos inválidos o ya registrados.")
+        else:
+            messages.error(request, "ID de cliente inválido.")
+
+    return redirect('Clientes')
+
+
+
 
 
 def validar_nit(nit):
@@ -122,34 +154,8 @@ def validar_dpi(dpi):
         return False
 
 
-def edit_cliente_view(request):
-    if request.method == 'POST':
-        id_personal_editar = request.POST.get('id_personal_editar')
-        print(f"ID recibido: {id_personal_editar}")
 
-        # Verificar que el ID esté presente y sea válido
-        if id_personal_editar and id_personal_editar.isdigit():
-            try:
-                cliente = Cliente.objects.get(pk=id_personal_editar)
-            except Cliente.DoesNotExist:
-                messages.error(request, "Cliente no encontrado.")
-                return redirect('Clientes')
 
-            # Cargar el formulario con los datos del cliente a editar
-            form = EditarClienteForm(request.POST, request.FILES, instance=cliente)
-
-            if form.is_valid():
-                # Actualizar los campos del cliente
-                estado = request.POST.get('estado_editar') == 'on'
-                cliente.estado = estado
-                form.save()  # Utilizamos form.save() para actualizar el resto de los campos
-                messages.success(request, "Cliente actualizado con éxito")
-            else:
-                messages.error(request, "Datos inválidos o ya registrados.")
-        else:
-            messages.error(request, "ID de cliente inválido.")
-
-    return redirect('Clientes')
 
 
 def delete_cliente_view(request):

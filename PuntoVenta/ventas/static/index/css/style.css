@@ -1,3 +1,4 @@
+/*
 body {
     display: flex;
     justify-content: center;
@@ -22,14 +23,14 @@ main {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ocupa todo el ancho disponible */
-    height: 100%; /* Ocupa todo el alto disponible */
+    width: 100%; /* Ocupa todo el ancho disponible 
+    height: 100%; /* Ocupa todo el alto disponible 
 }
 
 form {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Ocupa el 100% del contenedor */
+    height: 100%; /* Ocupa el 100% del contenedor 
 }
 
 label {
@@ -48,12 +49,12 @@ textarea {
     font-size: 16px;
     width: 100%;
     box-sizing: border-box;
-    flex-grow: 1; /* Permite que los elementos se expandan */
+    flex-grow: 1; /* Permite que los elementos se expandan 
 }
 
 textarea {
     resize: none;
-    flex-grow: 2; /* Hace que el área de texto sea más grande */
+    flex-grow: 2; /* Hace que el área de texto sea más grande 
 }
 
 button {

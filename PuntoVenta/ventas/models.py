@@ -1,17 +1,16 @@
 from django.db import models
-from django.forms import model_to_dict #Transforma a JSON un modelo
+from django.forms import model_to_dict 
 
 # Create your models here.
 class Cliente(models.Model):
-    codigo = models.CharField(max_length=50, unique=True, null=False, blank=True, default='0')
-    nit_Cui = models.CharField(max_length=200, unique=True, null=False, blank=False)
+    nit_Cui = models.CharField(max_length=20, primary_key=True, unique=True, null=False, blank=False)
     nombre = models.CharField(max_length=200, null=True, blank=True)
     correoElectronico = models.EmailField(max_length=200, null=True, blank=True)
     direccion = models.CharField(max_length=200, null=True, blank=True)
     estado = models.BooleanField(default=True)
     notas = models.TextField(blank=True, null=True)
     create = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name = 'clientes'
