@@ -33,8 +33,6 @@ def clientes_view(request):
     return render(request, 'clientes.html', {'clientes': clientes, 'form_personal': form_personal, 'form_editar': form_editar})
 
 
-
-
 def add_cliente_view(request):
     if request.method == 'POST':
         form = AddClienteForm(request.POST)
@@ -102,7 +100,6 @@ def validar_nit(nit):
 
 
 def validar_dpi(dpi):
-    '''Función para validar DPI'''
     dpi = dpi.replace('-', '').replace(' ', '')  # Elimina guiones y espacios
 
     if len(dpi) != 13:
@@ -125,8 +122,6 @@ def validar_dpi(dpi):
         return digito_calculado == digito_verificador
     except ValueError:
         return False
-
-
 
 def edit_cliente_view(request):
     if request.method == 'POST':
@@ -193,18 +188,10 @@ def add_producto_view(request):
     return redirect('Productos')
 
 def delete_producto_view(request):
-    producto_id = request.POST.get('id_producto_eliminar')
-    if producto_id:
-        producto = Producto.objects.filter(pk=producto_id).first()
-        if producto:
-            producto.delete()
-            messages.success(request, "Producto eliminado correctamente.")
-        else:
-            messages.error(request, "El producto no existe.")
-    else:
-        messages.error(request, "ID de producto no proporcionado.")
-    
-    return redirect('nombre_de_tu_vista_o_url')
+    if request.POST:
+        producto = Producto.objects.get(pk=request.POST.get('id_personal_eliminar'))
+        producto.delete()
+    return redirect('Productos')
 
 
 

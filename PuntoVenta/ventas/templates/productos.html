@@ -83,7 +83,7 @@
             <div class="modal-body bg-dark text-white">
                 <p class="labelmodal">¿Estás seguro?</p>
                 <form method="POST" action="{% url 'DeleteProducto' %}">{% csrf_token %}
-                    <input type="hidden" id="id_producto_eliminar" name="id_producto_eliminar">
+                    <input type="hidden" id="id_personal_eliminar" name="id_personal_eliminar">
             </div>
             <div class="modal-footer bg-dark text-white">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -114,7 +114,7 @@
             <table class="table table-hover table-primary" id="myTable">
                 <thead>
                     <tr>
-                        <th># ID</th>
+                        <th># </th>
                         <th>Código</th>
                         <th>Cantidad</th>
                         <th>Descripción</th>
@@ -128,7 +128,7 @@
                 <tbody class="text-dark">
                     {% for i in productos %}
                     <tr>
-                        <td>{{i.id}}</td>
+                        <td>{{forloop.counter}}</td>
                         <td>{{i.codigo}}</td>
                         <td>{{i.cantidad}}</td>
                         <td>{{i.descripcion}}</td>
@@ -145,7 +145,7 @@
                                 <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
                             </button>
 
-                            <button onclick="" class="btn btn-dark-outline btn-sm"
+                            <button onclick="eliminarPersonal('{{i.codigo}}')" class="btn btn-dark-outline btn-sm"
                                 data-toggle="modal" href="#EliminarPersonalModal"><img
                                     src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
                         </td>
