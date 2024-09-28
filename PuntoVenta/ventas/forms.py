@@ -1,5 +1,5 @@
 from django import forms
-from ventas.models import Cliente, Producto
+from .models import Cliente, Producto
 from django.core.exceptions import ValidationError
 
 class AddClienteForm(forms.ModelForm):
@@ -69,3 +69,4 @@ class AddProductoForm(forms.ModelForm):
             'costo_unitario': 'Costo U. GTQ : ',
             'imagen': 'Imagen :',
         }
+        

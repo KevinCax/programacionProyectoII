@@ -21,7 +21,7 @@ class Cliente(models.Model):
 
     
 class Producto(models.Model):
-    codigo = models.CharField(max_length=255, unique=True, null=False, blank=True)
+    codigo = models.CharField(primary_key=True ,max_length=100, unique=True, null=False, blank=True)
     cantidad = models.DecimalField(max_digits=15, decimal_places=2, null=True)
     descripcion = models.CharField(max_length=255, unique=True, null=False)
     imagen = models.ImageField(upload_to='productos', null=True, blank=True)
@@ -38,11 +38,12 @@ class Producto(models.Model):
         
     def __str__(self):
         return self.descripcion
+
     
 
 class Egreso(models.Model):
     fecha_pedido = models.DateField(max_length=255)
-    cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL , null=True , related_name='clientee')
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE , null=True , related_name='cliente')
     total = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     pagado = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     comentarios = models.TextField(blank=True, null=True)

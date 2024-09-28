@@ -10,6 +10,7 @@ from weasyprint.text.fonts import FontConfiguration
 from django.conf import settings
 import os
 
+
 # Vistas Clientes.
 
 def ventas_view(request):
@@ -32,6 +33,8 @@ def clientes_view(request):
     return render(request, 'clientes.html', {'clientes': clientes, 'form_personal': form_personal, 'form_editar': form_editar})
 
 
+
+
 def add_cliente_view(request):
     if request.method == 'POST':
         form = AddClienteForm(request.POST)
@@ -39,11 +42,12 @@ def add_cliente_view(request):
         if form.is_valid():
             nit_Cui_dpi = form.cleaned_data.get('nit_Cui')
 
-            nit_Cui_dpi_sin_guiones = nit_Cui_dpi.replace("-", "")
+            nit_Cui_dpi_sin_guiones = nit_Cui_dpi.replace("-", "").replace(" ", "")
             if len(nit_Cui_dpi_sin_guiones) == 13:
                 if not validar_dpi(nit_Cui_dpi_sin_guiones):
                     messages.error(request, "DPI inválido")
                     return redirect('Clientes')
+                
             elif len(nit_Cui_dpi_sin_guiones) >= 8 and len(nit_Cui_dpi_sin_guiones) <= 10:
                 if not validar_nit(nit_Cui_dpi_sin_guiones):
                     messages.error(request, "NIT inválido")
@@ -62,38 +66,6 @@ def add_cliente_view(request):
             messages.error(request, "Datos ingresados invalidos o formato incorrecto .")
     
     return redirect('Clientes')
-
-def edit_cliente_view(request):
-    if request.method == 'POST':
-        nit_cui_editar = request.POST.get('id_personal_editar')  # Cambié el nombre aquí para reflejar lo que estás enviando
-        print(f"NIT/CI recibido: {nit_cui_editar}")  # Verificar que se reciba correctamente
-
-        # Verificar que el ID esté presente y sea válido
-        if nit_cui_editar:
-            try:
-                cliente = Cliente.objects.get(pk=nit_cui_editar)
-            except Cliente.DoesNotExist:
-                messages.error(request, "Cliente no encontrado.")
-                return redirect('Clientes')
-
-            # Cargar el formulario con los datos del cliente a editar
-            form = EditarClienteForm(request.POST, request.FILES, instance=cliente)
-
-            if form.is_valid():
-                # Actualizar los campos del cliente
-                estado = request.POST.get('estado_editar') == 'on'
-                cliente.estado = estado
-                form.save()  # Utilizamos form.save() para actualizar el resto de los campos
-                messages.success(request, "Cliente actualizado con éxito")
-            else:
-                messages.error(request, "Datos inválidos o ya registrados.")
-        else:
-            messages.error(request, "ID de cliente inválido.")
-
-    return redirect('Clientes')
-
-
-
 
 
 def validar_nit(nit):
@@ -126,8 +98,9 @@ def validar_nit(nit):
         return digito_calculado == str(digito_verificador)
     except ValueError:
         return False
-
     
+
+
 def validar_dpi(dpi):
     '''Función para validar DPI'''
     dpi = dpi.replace('-', '').replace(' ', '')  # Elimina guiones y espacios
@@ -155,8 +128,33 @@ def validar_dpi(dpi):
 
 
 
+def edit_cliente_view(request):
+    if request.method == 'POST':
+        nit_cui_editar = request.POST.get('id_personal_editar')  
+        print(f"NIT/CI recibido: {nit_cui_editar}") 
+        # Verificar que el ID esté presente y sea válido
+        if nit_cui_editar:
+            try:
+                cliente = Cliente.objects.get(pk=nit_cui_editar)
+            except Cliente.DoesNotExist:
+                messages.error(request, "Cliente no encontrado.")
+                return redirect('Clientes')
 
+            # Cargar el formulario con los datos del cliente a editar
+            form = EditarClienteForm(request.POST, request.FILES, instance=cliente)
 
+            if form.is_valid():
+                # Actualizar los campos del cliente
+                estado = request.POST.get('estado_editar') == 'on'
+                cliente.estado = estado
+                form.save() 
+                messages.success(request, "Cliente actualizado con éxito")
+            else:
+                messages.error(request, "Datos inválidos o ya registrados.")
+        else:
+            messages.error(request, "ID de cliente inválido.")
+
+    return redirect('Clientes')
 
 def delete_cliente_view(request):
     if request.POST:
@@ -184,7 +182,6 @@ def productos_view(request):
 
 
 def add_producto_view(request):
-    #print("Guardar Cliente")
     if request.POST:
         form = AddProductoForm(request.POST, request.FILES)
         if form.is_valid:
@@ -194,6 +191,20 @@ def add_producto_view(request):
                 messages(request, "Error al guardar el producto")
                 return redirect('Productos')
     return redirect('Productos')
+
+def delete_producto_view(request):
+    producto_id = request.POST.get('id_producto_eliminar')
+    if producto_id:
+        producto = Producto.objects.filter(pk=producto_id).first()
+        if producto:
+            producto.delete()
+            messages.success(request, "Producto eliminado correctamente.")
+        else:
+            messages.error(request, "El producto no existe.")
+    else:
+        messages.error(request, "ID de producto no proporcionado.")
+    
+    return redirect('nombre_de_tu_vista_o_url')
 
 
 

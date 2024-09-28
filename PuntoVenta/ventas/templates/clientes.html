@@ -53,7 +53,6 @@
             </div>
             <div class="modal-body bg-dark text-white">
                 <form method="POST" action="{% url 'EditCliente' %}" enctype="multipart/form-data">{% csrf_token %}
-                    <!--<input type="hidden" id="id_personal_editar" value="{{ cliente.nit_Cui }}">-->
                     <input type="hidden" name="id_personal_editar" id="id_personal_editar">
                     {% for field in form_editar %}
                     <p> {{field.label}} <br>
