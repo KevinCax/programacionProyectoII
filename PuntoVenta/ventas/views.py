@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Cliente, Producto, Egreso, ProductosEgreso
-from .forms import AddClienteForm, EditarClienteForm, AddProductoForm
+from .forms import AddClienteForm, EditarClienteForm, AddProductoForm, EditarProductoForm
 from django.contrib import messages
 from django.views.generic import ListView
 from django.http import JsonResponse, HttpResponse
@@ -161,20 +161,25 @@ def delete_cliente_view(request):
 #Vistas de Productos
 
 def productos_view(request):
-    """
-    clientes = Cliente.objects.all()
-    
-    form_editar = EditarClienteForm()
-    """
     productos = Producto.objects.all()
-    form_add = AddProductoForm()
+    form_producto = AddProductoForm()
+    form_editar = EditarProductoForm()
     
     context = {
         'productos': productos,
-        'form_add': form_add
+        'form_producto': form_producto,
+        'form_editar': form_editar
     }
-    return render(request, 'productos.html', context)
+    return render(request, 'productos.html', {'productos': productos, 'form_producto': form_producto, 'form_editar': form_editar})
 
+def edit_producto_view(request):
+    if request.method == 'POST':
+        producto_editar = request.POST.get('id_producto_editar')  
+        form = EditarProductoForm(
+            request.POST, request.FILES, instance=Producto)
+        if form.is_valid():
+            form.save()
+    return redirect('productos')
 
 def add_producto_view(request):
     if request.POST:
@@ -189,7 +194,7 @@ def add_producto_view(request):
 
 def delete_producto_view(request):
     if request.POST:
-        producto = Producto.objects.get(pk=request.POST.get('id_personal_eliminar'))
+        producto = Producto.objects.get(pk=request.POST.get('id_producto_eliminar'))
         producto.delete()
     return redirect('Productos')
 
@@ -225,6 +230,14 @@ class add_ventas(ListView):
             data['error'] = str(e)
 
         return JsonResponse(data,safe=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context ["productos_lista"] = Producto.objects.all()
+        context ["clientes_lista"] = Cliente.objects.all()
+        
+        return context
+
     
     
 def export_pdf_view(request, id, iva):

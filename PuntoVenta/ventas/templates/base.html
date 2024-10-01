@@ -82,6 +82,12 @@
 
             <li class="nav-header">OPCIONES</li>
             <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class=" nav-icon fas fa-user-plus"></i>
+                <p>Usuarios</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{% url 'ventas' %} " class="nav-link">
                 <i class="nav-icon far fa-calendar-alt"></i>
                 <p>
@@ -89,14 +95,8 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="{% url 'Productos' %}" class="nav-link">
-                <i class="nav-icon fas fa-plus"></i>
-                <p>
-                  Productos
-                </p>
-              </a>
-            </li>
+
+
             <li class="nav-item">
               <a href="" class="nav-link">
                 <i class="nav-icon fas fa-industry"></i>
@@ -135,16 +135,19 @@
               </ul>
             </li>
             <li class="nav-header">EMPRESA</li>
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class=" nav-icon fas fa-globe"></i>
-                <p>Información</p>
-              </a>
-            </li>
+
             <li class="nav-item">
               <a href="{% url 'Clientes' %}" class="nav-link">
                 <i class="nav-icon fas fa-users-cog"></i>
                 <p>Clientes</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'Productos' %}" class="nav-link">
+                <i class="nav-icon fas fa-plus"></i>
+                <p>
+                  Productos
+                </p>
               </a>
             </li>
             <li class="nav-item">

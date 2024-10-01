@@ -70,3 +70,23 @@ class AddProductoForm(forms.ModelForm):
             'imagen': 'Imagen :',
         }
         
+class EditarProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ('cantidad', 'descripcion', 'categoria', 'precio_unitario','costo_unitario','imagen')
+        labels = {
+            'cantidad': 'Cantidad: ',
+            'descripcion': 'Descripción de producto: ',
+            'categoria': 'Categoría: ',
+            'precio_unitario': 'Precio U. GTQ: ',
+            'costo_unitario': 'Costo U. GTQ : ',
+            'imagen': 'Imagen :',
+        }
+        widgets = {
+            'cantidad': forms.TextInput(attrs={'type': 'text' , 'id': 'cantidad_editar'}),
+            'descripcion': forms.TextInput(attrs={'id': 'descripcion_editar'}),
+            'categoria': forms.TextInput(attrs={'id': 'categoria_editar'}),
+            'precio_unitario': forms.TextInput(attrs={'id': 'precio_editar'}),
+            'costo_unitario': forms.TextInput(attrs={'id': 'costo_editar'}),
+            'imagen': forms.FileInput(attrs={'id': 'imagen_editar'}),
+        }

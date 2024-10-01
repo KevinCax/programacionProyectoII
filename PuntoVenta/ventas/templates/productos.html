@@ -7,9 +7,10 @@
 
 <link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
 <script src="{% static 'index/js/b4.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-<div id="AgregarPersonalModal" class="modal" style="overflow: scroll;">
+<div id="AgregarProductoModal" class="modal" style="overflow: scroll;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -41,15 +42,15 @@
     </div>
 </div>
 
-<div id="EditarPersonalModal" class="modal">
+<div id="EditarProductoModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-dark">Editar</h5>
             </div>
             <div class="modal-body bg-dark text-white">
-                <form method="POST" action="{% url 'EditCliente' %}" enctype="multipart/form-data">{% csrf_token %}
-                    <input type="hidden" id="id_personal_editar" name="id_personal_editar">
+                <form method="POST" action="{% url 'EditProducto' %}" enctype="multipart/form-data">{% csrf_token %}
+                    <input type="hidden" id="id_producto_editar" name="id_producto_editar">
                     {% for field in form_editar %}
                     <p> {{field.label}} <br>
                         {{field|add_class:"form-control"}}</p>
@@ -74,7 +75,7 @@
     </div>
 </div>
 
-<div id="EliminarPersonalModal" class="modal">
+<div id="EliminarProductoModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -83,7 +84,7 @@
             <div class="modal-body bg-dark text-white">
                 <p class="labelmodal">¿Estás seguro?</p>
                 <form method="POST" action="{% url 'DeleteProducto' %}">{% csrf_token %}
-                    <input type="hidden" id="id_personal_eliminar" name="id_personal_eliminar">
+                    <input type="hidden" id="id_producto_eliminar" name="id_producto_eliminar">
             </div>
             <div class="modal-footer bg-dark text-white">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -102,7 +103,7 @@
     <div class="col-md-12">
         <h3 class="text-center">Productos   <i class="fas fa-boxes"></i></h3>
         <div class="col-md-3 pb-2">
-            <a href="#AgregarPersonalModal"
+            <a href="#AgregarProductoModal"
                 data-toggle="modal" data-dismiss="modal">
                 <button type="button" class="btn btn-success">
                     Agregar Productos
@@ -141,12 +142,12 @@
                         <td></td>
                         {% endif %}
                         <td>
-                            <button onclick="" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
+                            <button onclick="editarProducto('{{i.codigo}}', '{{i.cantidad}}', '{{i.descripcion}}', '{{i.categoria}}', '{{i.precio_unitario}}', '{{i.costo_unitario}}', '{{i.imagen}}')" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarProductoModal">
                                 <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
                             </button>
 
-                            <button onclick="eliminarPersonal('{{i.codigo}}')" class="btn btn-dark-outline btn-sm"
-                                data-toggle="modal" href="#EliminarPersonalModal"><img
+                            <button onclick="eliminarProducto('{{i.codigo}}')" class="btn btn-dark-outline btn-sm"
+                                data-toggle="modal" href="#EliminarProductoModal"><img
                                     src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
                         </td>
                     </tr>
@@ -157,14 +158,14 @@
     </div>
 </div>
 {% if messages %}
-{% for message in messages %}
-<script>
-    Swal.fire({
-        icon: 'error',
-        title: 'Error...',
-        text: "{{message}}",
-    })
-</script>
-{% endfor %}
+    {% for message in messages %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: "{{message}}",
+            })
+        </script>
+    {% endfor %}
 {% endif %}
 {% endblock %}

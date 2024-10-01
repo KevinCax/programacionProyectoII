@@ -23,17 +23,6 @@ function editarEquipo(id, area, codigo, descripcion) {
   document.getElementById("descripcion_editar").value = descripcion;
 }*/
 
-function editarProduct(id, precio, descripcion, costo, cantidad, categoria, servicio) {
-  document.getElementById("id_producto_editar").value = id;
-  document.getElementById("precio_editar").value = precio;
-  document.getElementById("descripcion_editar").value = descripcion;
-  document.getElementById("costo_editar").value = costo;
-  document.getElementById("cantidad_editar").value = cantidad;
-  document.getElementById("categoria_editar").value = categoria;
-  if (servicio=='True'){
-    document.getElementById('servicio_editar').checked=true;
-  }
-}
 
 /*function historialPreventivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
   
@@ -90,9 +79,21 @@ function eliminarPreventivo(id) {
   document.getElementById("id_preventivo_eliminar").value = id;
 }*/
 
+function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
+  document.getElementById("id_producto_editar").value = id;
+  document.getElementById("cantidad_editar").value = cantidad;
+  document.getElementById("descripcion_editar").value = descripcion;
+  document.getElementById("categoria_editar").value = categoria;
+  document.getElementById("precio_editar").value = precio_unitario;
+  document.getElementById("costo_editar").value = costo_unitario;
+  document.getElementById("imagen_editar").value = imagen;
+}
+
 function eliminarProducto(id) {
   document.getElementById("id_producto_eliminar").value = id;
 }
+
+
 
 function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado) {
   document.getElementById("id_personal_editar").value = id;
@@ -107,13 +108,22 @@ function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado)
 }
 
 
-
 function eliminarPersonal(id) {
   document.getElementById("id_personal_eliminar").value = id;
 }
 
 function borrarContent(){
   document.getElementById("search").value = "";
+}
+
+function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
+  document.getElementById("id_producto_editar").value = id;
+  document.getElementById("cantidad_editar").value = cantidad;
+  document.getElementById("descripcion_editar").value = descripcion;
+  document.getElementById("categoria_editar").value = categoria;
+  document.getElementById("precio_editar").value = precio_unitario;
+  document.getElementById("costo_editar").value = costo_unitario;
+  document.getElementById("imagen_editar").value = imagen;
 }
 
 /*function seleccionarCliente(id, nombre){
