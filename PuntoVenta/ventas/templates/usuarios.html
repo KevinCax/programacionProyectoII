@@ -1,0 +1,163 @@
+
+{% extends "base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
+<script src="{% static 'index/js/b4.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div id="AgregarPersonalModal" class="modal" style="overflow: scroll;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-dark">Agregar nuevo usuario</h5>
+            </div>
+            <div class="modal-body bg-dark text-white">
+                <form method="POST" action="{% url 'AddCliente' %}" enctype="multipart/form-data">{% csrf_token %}
+                    {% for field in form_personal %}
+                    <p>{{field.label}} <br>
+                        {{field|add_class:"form-control text-dark"}}</p>
+                        
+                    {% for error in field.errors %}
+                    <p class="alarma">{{error}}</p>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <p class="alarma">{{error}}</p>
+                    {% endfor %}
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-success">
+                    Agregar
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="EditarPersonalModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-dark">Editar</h5>
+            </div>
+            <div class="modal-body bg-dark text-white">
+                <form method="POST" action="{% url 'EditCliente' %}" enctype="multipart/form-data">{% csrf_token %}
+                    <input type="hidden" name="id_personal_editar" id="id_personal_editar">
+                    {% for field in form_editar %}
+                    <p> {{field.label}} <br>
+                        {{field|add_class:"form-control"}}</p>
+                    {% for error in field.errors %}
+                    <p class="alarma">{{error}}</p>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <p class="alarma">{{error}}</p>
+                    {% endfor %}
+                    <p>
+                        <label for="estado_editar">Estado:</label>
+                        <input type="checkbox" id="estado_editar" name="estado_editar">
+                    </p>
+                    
+            </div>
+            <div class="modal-footer bg-dark text-white">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                   Volver
+                </button>
+                <button type="submit" class="btn btn-success">
+                    Aceptar
+                </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EliminarPersonalModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-dark">Eliminar</h5>
+            </div>
+            <div class="modal-body bg-dark text-white">
+                <p class="labelmodal">¿Estás seguro?</p>
+                <form method="POST" action="{% url 'DeleteCliente' %}">{% csrf_token %}
+                    <input type="hidden" id="id_personal_eliminar" name="id_personal_eliminar">
+            </div>
+            <div class="modal-footer bg-dark text-white">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                   Volver
+                </button>
+                <button type="submit" class="btn btn-success">
+                    Aceptar
+                </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Usuarios   <i class="fas fa-users"></i></h3>
+        <div class="col-md-3 pb-2">
+            <a href="#AgregarPersonalModal"
+                data-toggle="modal" data-dismiss="modal">
+                <button type="button" class="btn btn-success">
+                    Agregar Usuario
+                    <i class="fas fa-plus-circle"></i>
+                </button>
+            </a>
+        </div>
+        <div class="card card-body" style="overflow:scroll">
+            <table class="table table-hover table-primary" id="myTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    {% for i in usuario %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        
+                        <td>
+                            <button onclick="editarPersonal()" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
+                                <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
+                            </button>                            
+
+                            <button onclick="eliminarPersonal()" class="btn btn-dark-outline btn-sm"
+                                data-toggle="modal" href="#EliminarPersonalModal"><img
+                                    src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            Swal.fire({
+                icon: "{{ message.tags }}",  
+                title: "{{ message.tags|capfirst }}", 
+                text: "{{ message }}",
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+{% endblock %}

@@ -276,3 +276,10 @@ def export_pdf_view(request, id, iva):
     HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(target=response, font_config=font_config,stylesheets=[CSS(css_url)])
 
     return response
+
+
+# Vistas Usuarios
+
+def usuarios_view(request):
+    
+    return render(request, 'usuarios.html')

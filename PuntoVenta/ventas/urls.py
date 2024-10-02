@@ -15,4 +15,5 @@ urlpatterns = [
     path('add_venta/',views.add_ventas.as_view(), name='AddVenta'),
     path('export/', views.export_pdf_view, name="ExportPDF" ),
     path('export/<id>/<iva>', views.export_pdf_view, name="ExportPDF" ),
+    path('usuarios/', views.usuarios_view, name='Usuarios'),
 ]
