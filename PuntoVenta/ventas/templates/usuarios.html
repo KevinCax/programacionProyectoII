@@ -11,15 +11,15 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-<div id="AgregarPersonalModal" class="modal" style="overflow: scroll;">
+<div id="AgregarUsuarioModal" class="modal" style="overflow: scroll;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-dark">Agregar nuevo usuario</h5>
             </div>
             <div class="modal-body bg-dark text-white">
-                <form method="POST" action="{% url 'AddCliente' %}" enctype="multipart/form-data">{% csrf_token %}
-                    {% for field in form_personal %}
+                <form method="POST" action="{% url 'AddUsuario' %}" enctype="multipart/form-data">{% csrf_token %}
+                    {% for field in form_usuario %}
                     <p>{{field.label}} <br>
                         {{field|add_class:"form-control text-dark"}}</p>
                         
@@ -45,7 +45,7 @@
 </div>
 
 
-<div id="EditarPersonalModal" class="modal">
+<div id="EditarUsuarioModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -83,7 +83,7 @@
     </div>
 </div>
 
-<div id="EliminarPersonalModal" class="modal">
+<div id="EliminarUsuarioModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -111,7 +111,7 @@
     <div class="col-md-12">
         <h3 class="text-center">Usuarios   <i class="fas fa-users"></i></h3>
         <div class="col-md-3 pb-2">
-            <a href="#AgregarPersonalModal"
+            <a href="#AgregarUsuarioModal"
                 data-toggle="modal" data-dismiss="modal">
                 <button type="button" class="btn btn-success">
                     Agregar Usuario
@@ -124,22 +124,34 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        
+                        <th>DPI</th>
+                        <th>Nombre</th>
+                        <th>Correo Electrónico</th>
+                        <th>Notas</th>
+                        <th>Fecha de Ingreso</th>
+                        <th>Cargo</th>
+                        <th>Estado</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody class="text-dark">
-                    {% for i in usuario %}
+                    {% for i in Usuario %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        
+                        <td>{{i.dpi}}</td>
+                        <td>{{i.nombre}}</td>
+                        <td>{{i.correo}}</td>
+                        <td>{{i.notas}}</td>
+                        <td>{{i.fecha_ingreso}}</td>
+                        <td>{{i.cargo}}</td>
+                        <td>{{i.estado}}</td>
                         <td>
-                            <button onclick="editarPersonal()" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
+                            <button onclick="editarPersonal()" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarUsuarioModal">
                                 <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
                             </button>                            
 
                             <button onclick="eliminarPersonal()" class="btn btn-dark-outline btn-sm"
-                                data-toggle="modal" href="#EliminarPersonalModal"><img
+                                data-toggle="modal" href="#EliminarUsuarioModal"><img
                                     src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
                         </td>
                     </tr>

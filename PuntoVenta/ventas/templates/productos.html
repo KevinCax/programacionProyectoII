@@ -18,7 +18,7 @@
             </div>
             <div class="modal-body bg-dark text-white">
                 <form method="POST" action="{% url 'AddProducto' %}" enctype="multipart/form-data">{% csrf_token %}
-                    {% for field in form_add %}
+                    {% for field in form_producto %}
                     <p>{{field.label}} <br>
                         {{field|add_class:"form-control text-dark"}}</p>
                     {% for error in field.errors %}

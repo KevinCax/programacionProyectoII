@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Producto
+from .models import Cliente, Producto, Usuario
 from django.core.exceptions import ValidationError
 
 class AddClienteForm(forms.ModelForm):
@@ -90,3 +90,30 @@ class EditarProductoForm(forms.ModelForm):
             'costo_unitario': forms.TextInput(attrs={'id': 'costo_editar'}),
             'imagen': forms.FileInput(attrs={'id': 'imagen_editar'}),
         }
+        
+class AddUsuarioForm(forms.ModelForm):
+    fecha_ingreso = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    confirmar_clave = forms.CharField(widget=forms.PasswordInput())
+    
+    class Meta:
+        model = Usuario
+        fields = ('dpi', 'nombre', 'clave', 'confirmar_clave', 'correoElectronico', 'notas', 'fecha_ingreso', 'rol', 'estado')
+        labels = {
+            'dpi': 'DPI: ',
+            'nombre': 'Nombre: ',
+            'clave': 'Contraseña: ',
+            'confirmar_clave': 'Confirmar Contraseña: ',
+            'correoElectronico': 'Correo Electrónico: ',
+            'notas': 'Notas: ',
+            'fecha_ingreso': 'Fecha de Ingreso: ',
+            'rol': 'Cargo: ',
+            'estado': 'Estado: ',
+        }
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        clave = cleaned_data.get("clave")
+        confirmar_clave = cleaned_data.get("confirmar_clave")
+
+        if clave and confirmar_clave and clave != confirmar_clave:
+            raise forms.ValidationError("Las contraseñas no coinciden.")

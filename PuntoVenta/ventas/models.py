@@ -1,5 +1,6 @@
 from django.db import models
-from django.forms import model_to_dict 
+from django.forms import model_to_dict
+from django.utils import timezone
 
 # Create your models here.
 class Cliente(models.Model):
@@ -28,7 +29,7 @@ class Producto(models.Model):
     categoria = models.CharField(max_length=100)
     precio_unitario = models.DecimalField(max_digits=15, decimal_places=2, null=False)
     costo_unitario = models.DecimalField(max_digits=15, decimal_places=2, null=False)
-    create = models.DateTimeField(auto_now_add=True)
+    create = models.DateTimeField(auto_now_add=True )
     update = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -84,4 +85,30 @@ class ProductosEgreso(models.Model):
     def toJSON(self):
         item = model_to_dict(self, exclude=['created'])
         return item
+    
+    
+class Usuario(models.Model):
+    dpi = models.CharField(max_length=20, primary_key=True, unique=True, null=False, blank=False)
+    nombre = models.CharField(max_length=200, null=True, blank=True)
+    clave = models.CharField(max_length=200, null=True, blank=True)
+    confirmar_clave = models.CharField(max_length=200, null=True, blank=True)
+    correoElectronico = models.EmailField(max_length=200, null=True, blank=True)
+    notas = models.TextField(blank=True, null=True)
+    fecha_ingreso = timezone.now()
+    rol = models.CharField(max_length=100)
+    
+    create = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now_add=True)
+    ESTADO_CHOICES = [
+        ('activo', 'Activo'),
+        ('inactivo', 'Inactivo'),
+    ]
+    estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='activo')
+    
+    class Meta:
+        verbose_name = 'usuarios'
+        verbose_name_plural = 'usuarios'
+        
+    def __str__(self):
+        return self.nombre
 

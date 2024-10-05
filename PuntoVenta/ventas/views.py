@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Cliente, Producto, Egreso, ProductosEgreso
-from .forms import AddClienteForm, EditarClienteForm, AddProductoForm, EditarProductoForm
+from .models import Cliente, Producto, Usuario, Egreso, ProductosEgreso
+from .forms import AddClienteForm, EditarClienteForm, AddProductoForm, EditarProductoForm, AddUsuarioForm
 from django.contrib import messages
 from django.views.generic import ListView
 from django.http import JsonResponse, HttpResponse
@@ -237,8 +237,6 @@ class add_ventas(ListView):
         context ["clientes_lista"] = Cliente.objects.all()
         
         return context
-
-    
     
 def export_pdf_view(request, id, iva):
     #print(id)
@@ -281,5 +279,23 @@ def export_pdf_view(request, id, iva):
 # Vistas Usuarios
 
 def usuarios_view(request):
+    usuarios = Usuario.objects.all()
+    form_usuario = AddUsuarioForm()
     
-    return render(request, 'usuarios.html')
+    context = {
+        'usuarios': usuarios,
+        'form_usuario': form_usuario
+    }
+    
+    return render(request, 'usuarios.html', {'usuarios': usuarios, 'form_usuario': form_usuario})
+
+def add_usuarios_view(request):
+    if request.POST:
+        form = AddUsuarioForm(request.POST, request.FILES)
+        if form.is_valid:
+            try:
+                form.save()
+            except:
+                messages(request, "Error al guardar el usuario")
+                return redirect('Usuarios')
+    return redirect('Usuarios')
