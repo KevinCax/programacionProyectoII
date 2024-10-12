@@ -280,6 +280,7 @@ def export_pdf_view(request, id, iva):
 
 def usuarios_view(request):
     usuarios = Usuario.objects.all()
+    print(usuarios)
     form_usuario = AddUsuarioForm()
     
     context = {
@@ -290,12 +291,17 @@ def usuarios_view(request):
     return render(request, 'usuarios.html', {'usuarios': usuarios, 'form_usuario': form_usuario})
 
 def add_usuarios_view(request):
-    if request.POST:
-        form = AddUsuarioForm(request.POST, request.FILES)
-        if form.is_valid:
+    if request.method == 'POST':
+        form = AddUsuarioForm(request.POST)
+        if form.is_valid():
             try:
                 form.save()
-            except:
-                messages(request, "Error al guardar el usuario")
+                messages.success(request, "Usuario guardado con éxito")
                 return redirect('Usuarios')
+            except Exception as e:
+                messages.error(request, f"Error al guardar el usuario: {str(e)}")
+        else:
+            messages.error(request, "Datos ingresados inválidos o formato incorrecto.")
+    
+    # Redirigir solo si todo está bien
     return redirect('Usuarios')

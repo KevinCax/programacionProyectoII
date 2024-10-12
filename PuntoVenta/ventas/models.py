@@ -91,10 +91,9 @@ class Usuario(models.Model):
     dpi = models.CharField(max_length=20, primary_key=True, unique=True, null=False, blank=False)
     nombre = models.CharField(max_length=200, null=True, blank=True)
     clave = models.CharField(max_length=200, null=True, blank=True)
-    confirmar_clave = models.CharField(max_length=200, null=True, blank=True)
     correoElectronico = models.EmailField(max_length=200, null=True, blank=True)
     notas = models.TextField(blank=True, null=True)
-    fecha_ingreso = timezone.now()
+    fecha_ingreso = models.DateTimeField(null=True, blank=True)
     rol = models.CharField(max_length=100)
     
     create = models.DateTimeField(auto_now_add=True)

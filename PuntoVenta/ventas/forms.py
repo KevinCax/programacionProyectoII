@@ -1,4 +1,5 @@
 from django import forms
+import re
 from .models import Cliente, Producto, Usuario
 from django.core.exceptions import ValidationError
 
@@ -92,12 +93,24 @@ class EditarProductoForm(forms.ModelForm):
         }
         
 class AddUsuarioForm(forms.ModelForm):
-    fecha_ingreso = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     confirmar_clave = forms.CharField(widget=forms.PasswordInput())
+    
+    ROL_CHOICES = [
+        ('Vendedor', 'Vendedor'),
+        ('Recepcionista', 'Recepcionista'),
+        ('Supervisor', 'Supervisor'),
+        ('Administrador', 'Administrador'),
+    ]
+
+    rol = forms.ChoiceField(choices=ROL_CHOICES, initial='Vendedor')
     
     class Meta:
         model = Usuario
         fields = ('dpi', 'nombre', 'clave', 'confirmar_clave', 'correoElectronico', 'notas', 'fecha_ingreso', 'rol', 'estado')
+        widgets = {
+            'clave': forms.PasswordInput(),
+            'fecha_ingreso': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
         labels = {
             'dpi': 'DPI: ',
             'nombre': 'Nombre: ',
@@ -109,11 +122,34 @@ class AddUsuarioForm(forms.ModelForm):
             'rol': 'Cargo: ',
             'estado': 'Estado: ',
         }
-        
+
+    # Validar que el nombre contenga al menos dos palabras
+    def clean_nombre(self):
+        nombre = self.cleaned_data.get('nombre')
+        if not nombre:
+            raise ValidationError("El nombre es obligatorio.")
+        palabras = nombre.split()
+        if len(palabras) < 2:
+            raise ValidationError("El nombre debe constar de al menos dos palabras.")
+        if not all(palabra.isalpha() for palabra in palabras):
+            raise ValidationError("El nombre solo puede contener letras.")
+        return nombre
+
+    # Validar el formato del correo electrónico
+    def clean_correoElectronico(self):
+        correo = self.cleaned_data.get('correoElectronico')
+        if not correo:
+            raise ValidationError("El correo electrónico es obligatorio.")
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(pattern, correo):
+            raise ValidationError("El correo electrónico no es válido.")
+        return correo
+
+    # Validar que las contraseñas coincidan
     def clean(self):
         cleaned_data = super().clean()
-        clave = cleaned_data.get("clave")
-        confirmar_clave = cleaned_data.get("confirmar_clave")
-
+        clave = cleaned_data.get('clave')
+        confirmar_clave = cleaned_data.get('confirmar_clave')
+        
         if clave and confirmar_clave and clave != confirmar_clave:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
+            raise ValidationError("Las contraseñas no coinciden.")
