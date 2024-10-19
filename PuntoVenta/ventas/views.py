@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cliente, Producto, Usuario, Egreso, ProductosEgreso
-from .forms import AddClienteForm, EditarClienteForm, AddProductoForm, EditarProductoForm, AddUsuarioForm
+from .forms import AddClienteForm, EditarClienteForm, AddProductoForm, EditarProductoForm, AddUsuarioForm, EditarUsuarioForm
 from django.contrib import messages
 from django.views.generic import ListView
 from django.http import JsonResponse, HttpResponse
@@ -9,6 +9,8 @@ from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
 from django.conf import settings
 import os
+from django.db import IntegrityError
+
 
 
 # Vistas Clientes.
@@ -127,7 +129,6 @@ def edit_cliente_view(request):
     if request.method == 'POST':
         nit_cui_editar = request.POST.get('id_personal_editar')  
         print(f"NIT/CI recibido: {nit_cui_editar}") 
-        # Verificar que el ID esté presente y sea válido
         if nit_cui_editar:
             try:
                 cliente = Cliente.objects.get(pk=nit_cui_editar)
@@ -174,19 +175,33 @@ def productos_view(request):
 
 def edit_producto_view(request):
     if request.method == 'POST':
-        producto_editar = request.POST.get('id_producto_editar')  
-        form = EditarProductoForm(
-            request.POST, request.FILES, instance=Producto)
-        if form.is_valid():
-            form.save()
-    return redirect('productos')
+        editarProducto = request.POST.get('id_producto_editar')
+        if editarProducto:
+            try:
+                producto = Producto.objects.get(pk=editarProducto)
+                form = EditarProductoForm(request.POST, request.FILES, instance=producto)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, "Producto actualizado con éxito")
+                else:
+                    print(form.errors)
+                    messages.error(request, "No se pudo actualizar el producto")
+            except Producto.DoesNotExist:
+                messages.error(request, "Producto no encontrado")
+        else:
+            messages.error(request, "ID de producto Invalido")
+    return redirect('Productos')
+            
+            
+    return redirect('Productos')
 
 def add_producto_view(request):
-    if request.POST:
-        form = AddProductoForm(request.POST, request.FILES)
-        if form.is_valid:
+    if request.method == 'POST':
+        form = AddProductoForm(request.POST)
+        if form.is_valid():
             try:
                 form.save()
+                messages.success(request, "Producto guardado con éxito")
             except:
                 messages(request, "Error al guardar el producto")
                 return redirect('Productos')
@@ -280,28 +295,98 @@ def export_pdf_view(request, id, iva):
 
 def usuarios_view(request):
     usuarios = Usuario.objects.all()
-    print(usuarios)
     form_usuario = AddUsuarioForm()
+    form_editar = EditarUsuarioForm()
     
     context = {
         'usuarios': usuarios,
-        'form_usuario': form_usuario
+        'form_usuario': form_usuario,
+        'usuario_editar': form_editar
     }
     
-    return render(request, 'usuarios.html', {'usuarios': usuarios, 'form_usuario': form_usuario})
+    return render(request, 'usuarios.html', {'usuarios': usuarios, 'form_usuario': form_usuario, 'form_editar': form_editar})
 
 def add_usuarios_view(request):
     if request.method == 'POST':
         form = AddUsuarioForm(request.POST)
+        dpi = request.POST.get('dpi', None)
+
+        # Validación del DPI
+        if dpi:
+            if not validar_dpi(dpi):
+                messages.error(request, "El DPI ingresado no es válido.")
+                return redirect('Usuarios')
+            
+            if Usuario.objects.filter(dpi=dpi).exists():
+                messages.error(request, "DPI ingresado ya existe.")
+                return redirect('Usuarios')
+
+        # Validación del formulario
         if form.is_valid():
             try:
                 form.save()
-                messages.success(request, "Usuario guardado con éxito")
-                return redirect('Usuarios')
+                messages.success(request, "Usuario guardado con éxito.")
+            except IntegrityError:
+                messages.error(request, "Error: Datos inválidos o ya registrados.")
             except Exception as e:
-                messages.error(request, f"Error al guardar el usuario: {str(e)}")
+                messages.error(request, f"Error inesperado: {str(e)}")
         else:
-            messages.error(request, "Datos ingresados inválidos o formato incorrecto.")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error en {field}: {error}")
+
+    return redirect('Usuarios')
+
+def edit_usuario_view(request):
+    if request.method == 'POST':
+        dpi_editar = request.POST.get('dpi_usuario_editar')  
+        print(f"DPI recibido: {dpi_editar}") 
+        
+        if dpi_editar:
+            try:
+                usuario = get_object_or_404(Usuario, dpi=dpi_editar)
+            except Usuario.DoesNotExist:
+                messages.error(request, "Usuario no encontrado.")
+                return redirect('Usuarios')
+
+            # Cargar el formulario con los datos del usuario a editar
+            form = EditarUsuarioForm(request.POST, request.FILES, instance=usuario)
+
+            if form.is_valid():
+                form.save() 
+                messages.success(request, "Usuario actualizado con éxito")
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"Error en {field}: {error}")
+        else:
+            messages.error(request, "DPI de usuario inválido.")
+
+    return redirect('Usuarios')
+
+
+def toggle_usuario_estado(request):
+    if request.method == 'POST':
+        dpi_usuario = request.POST.get('dpi')
+        nuevo_estado = request.POST.get('nuevo_estado')
+        print(f"DPI recibido: {dpi_usuario}")
+        print(f"Nuevo estado: {nuevo_estado}")
+        print(f"POST data: {request.POST}")
+        
+        if dpi_usuario and nuevo_estado:
+            try:
+                usuario = get_object_or_404(Usuario, dpi=dpi_usuario)
+                usuario.estado = nuevo_estado
+                usuario.save()
+                mensaje = f"Usuario {'desactivado' if nuevo_estado == 'inactivo' else 'activado'} con éxito"
+                messages.success(request, mensaje)
+            except Usuario.DoesNotExist:
+                messages.error(request, f"No se encontró el usuario con DPI {dpi_usuario}")
+            except Exception as e:
+                messages.error(request, f"Error al cambiar el estado del usuario: {str(e)}")
+        else:
+            messages.error(request, "No se proporcionaron datos válidos para actualizar el usuario")
+    else:
+        messages.error(request, "Método no permitido")
     
-    # Redirigir solo si todo está bien
     return redirect('Usuarios')

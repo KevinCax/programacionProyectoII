@@ -4,7 +4,7 @@
   });*/
 
 
-function eliminarEquipo(id) {
+/*function eliminarEquipo(id) {
   document.getElementById("id_equipo_eliminar").value = id;
 }
 
@@ -21,21 +21,10 @@ function editarEquipo(id, area, codigo, descripcion) {
   document.getElementById("area_editar").value = area;
   document.getElementById("codigo_editar").value = codigo;
   document.getElementById("descripcion_editar").value = descripcion;
-}
+}*/
 
-function editarProduct(id, precio, descripcion, costo, cantidad, categoria, servicio) {
-  document.getElementById("id_producto_editar").value = id;
-  document.getElementById("precio_editar").value = precio;
-  document.getElementById("descripcion_editar").value = descripcion;
-  document.getElementById("costo_editar").value = costo;
-  document.getElementById("cantidad_editar").value = cantidad;
-  document.getElementById("categoria_editar").value = categoria;
-  if (servicio=='True'){
-    document.getElementById('servicio_editar').checked=true;
-  }
-}
 
-function historialPreventivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
+/*function historialPreventivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
   
   document.getElementById("hist_preventivo_editar").value = id;
   document.getElementById("hist_solicitadoh").value = solicitadoh;
@@ -55,9 +44,9 @@ function editarPreventivo(id, fecha, contacto, piezas, actividades, comentarios,
   document.getElementById("comentarios_editar").value = comentarios;
   document.getElementById("piezas_editar").value = piezas;
   document.getElementById("total_editar").value = total;
-}
+}*/
 
-function editarCorrectivo(id, equipo, fecha, solicitado, estado, responsable, actividades, subtotalmo, supervisado, falla) {
+/*function editarCorrectivo(id, equipo, fecha, solicitado, estado, responsable, actividades, subtotalmo, supervisado, falla) {
   
   document.getElementById("id_correctivo_editar").value = id;
   document.getElementById("equipo_editar").value = equipo;
@@ -73,9 +62,9 @@ function editarCorrectivo(id, equipo, fecha, solicitado, estado, responsable, ac
 
 function eliminarCorrectivo(id) {
   document.getElementById("id_correctivo_eliminar").value = id;
-}
+}*/
 
-function historialCorrectivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
+/*function historialCorrectivo(id,solicitadoh,supervisado,responsable, subtotalpiezas, subtotalmo, fecha) {
   
   document.getElementById("hist_correctivo_editar").value = id;
   document.getElementById("hist_solicitadoh").value = solicitadoh;
@@ -88,18 +77,36 @@ function historialCorrectivo(id,solicitadoh,supervisado,responsable, subtotalpie
 
 function eliminarPreventivo(id) {
   document.getElementById("id_preventivo_eliminar").value = id;
+}*/
+
+function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
+  document.getElementById("id_producto_editar").value = id;
+  document.getElementById("cantidad_editar").value = cantidad;
+  document.getElementById("descripcion_editar").value = descripcion;
+  document.getElementById("categoria_editar").value = categoria;
+  document.getElementById("precio_editar").value = precio_unitario;
+  document.getElementById("costo_editar").value = costo_unitario;
+  document.getElementById("imagen_editar").value = imagen;
 }
 
 function eliminarProducto(id) {
   document.getElementById("id_producto_eliminar").value = id;
 }
 
-function editarPersonal(id, nombre, telefono, cargo) {
+
+
+function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado) {
   document.getElementById("id_personal_editar").value = id;
   document.getElementById("nombre_editar").value = nombre;
-  document.getElementById("telefono_editar").value = telefono;
-  document.getElementById("cargo_editar").value = cargo;
+  document.getElementById("correo_editar").value = correoElectronico;
+  document.getElementById("direccion_editar").value = direccion;
+  document.getElementById("notas_editar").value = notas;
+
+  // Alterna el estado del checkbox
+  var estadoCheckbox = document.getElementById("estado_editar");
+  estadoCheckbox.checked = (estado === true || estado === 'true' || estado === 1 || estado === '1');
 }
+
 
 function eliminarPersonal(id) {
   document.getElementById("id_personal_eliminar").value = id;
@@ -109,10 +116,60 @@ function borrarContent(){
   document.getElementById("search").value = "";
 }
 
-function seleccionarCliente(id, nombre){
+function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
+  document.getElementById("id_producto_editar").value = id;
+  document.getElementById("cantidad_editar").value = cantidad;
+  document.getElementById("descripcion_editar").value = descripcion;
+  document.getElementById("categoria_editar").value = categoria;
+  document.getElementById("precio_editar").value = precio_unitario;
+  document.getElementById("costo_editar").value = costo_unitario;
+  document.getElementById("imagen_editar").value = imagen;
+}
+
+/*function seleccionarCliente(id, nombre){
  document.getElementById("id_cliente").value = id;
  document.getElementById("cliente").value = nombre;
+}*/
+
+function editarUsuario(dpi, nombre, correoElectronico, rol, notas) {
+  // Establecer los valores en el formulario
+  document.getElementById("dpi_usuario_editar").value = dpi;
+  document.getElementById("nombre_editar").value = nombre;
+  document.getElementById("correo_editar").value = correoElectronico;
+  document.getElementById("rol_editar").value = rol;
+  document.getElementById("notas_editar").value = notas;
+
+  // Actualizar el título del modal si es necesario
+  document.querySelector("#EditarUsuarioModal .modal-title").textContent = "Editar Usuario: " + nombre;
+
+  // Mostrar el modal
+  $('#EditarUsuarioModal').modal('show');
 }
+
+
+function toggleEstadoUsuario(dpi, estadoActual) {
+  document.getElementById("dpi_usuario_toggle").value = dpi;
+  var nuevoEstado = estadoActual === 'activo' ? 'inactivo' : 'activo';
+  document.getElementById("nuevo_estado_usuario").value = nuevoEstado;
+  
+  var btnConfirmar = document.getElementById("btn_confirmar_toggle");
+  btnConfirmar.textContent = estadoActual === 'activo' ? 'Desactivar' : 'Activar';
+  btnConfirmar.classList.remove('btn-success', 'btn-danger');
+  btnConfirmar.classList.add(estadoActual === 'activo' ? 'btn-danger' : 'btn-success');
+  
+  $('#ToggleUsuarioModal').modal('show');
+}
+
+// Agregar este evento para depuración
+document.getElementById("form_toggle_estado").addEventListener("submit", function(event) {
+  console.log("Formulario enviado");
+  console.log("DPI:", document.getElementById("dpi_usuario_toggle").value);
+  console.log("Nuevo estado:", document.getElementById("nuevo_estado_usuario").value);
+});
+
+/*function eliminarUsuario(id) {
+  document.getElementById("id_usuario_eliminar").value = id;
+}*/
 
 function activarEspera(){
   const btn = document.getElementById("btn");
@@ -153,4 +210,20 @@ $(document).ready(function () {
     ]
   });
 });
- 
+
+function toggleEstadoUsuario(dpi, estadoActual) {
+  document.getElementById("dpi_usuario_toggle").value = dpi;
+  
+  var boton = document.getElementById("boton_toggle_" + dpi);
+  var nuevoEstado = estadoActual === 'activo' ? 'inactivo' : 'activo';
+  
+  boton.textContent = estadoActual === 'activo' ? 'Desactivar' : 'Activar';
+  boton.classList.toggle('btn-danger');
+  boton.classList.toggle('btn-success');
+  
+  // Opcional: actualizar un campo oculto con el nuevo estado
+  document.getElementById("nuevo_estado_usuario").value = nuevoEstado;
+  
+  // Enviar el formulario
+  document.getElementById("form_toggle_estado").submit();
+}

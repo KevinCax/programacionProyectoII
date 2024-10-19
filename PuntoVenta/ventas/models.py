@@ -96,13 +96,12 @@ class Usuario(models.Model):
     fecha_ingreso = models.DateTimeField(null=True, blank=True)
     rol = models.CharField(max_length=100)
     
-    create = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now_add=True)
     ESTADO_CHOICES = [
         ('activo', 'Activo'),
         ('inactivo', 'Inactivo'),
     ]
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='activo')
+    is_active = models.BooleanField(default=True)
     
     class Meta:
         verbose_name = 'usuarios'
@@ -110,4 +109,7 @@ class Usuario(models.Model):
         
     def __str__(self):
         return self.nombre
+
+
+usuarios_activos = Usuario.objects.filter(estado='activo')
 

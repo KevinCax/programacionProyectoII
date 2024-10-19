@@ -129,8 +129,8 @@
                         <th>Nombre</th>
                         <th>Correo Electrónico</th>
                         <th>Dirección</th>
-                        <th>Estado</th>
                         <th>Notas</th>
+                        <th>Estado</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -142,16 +142,17 @@
                         <td>{{i.nombre}}</td>
                         <td>{{i.correoElectronico}}</td>
                         <td>{{i.direccion}}</td>
-                        <td>{{i.estado}}</td>
                         <td>{{i.notas}}</td>
-                        <td>
-                            <button onclick="editarPersonal('{{ i.nit_Cui }}' ,'{{i.nombre}}', '{{i.correoElectronico}}', '{{i.direccion}}', '{{i.estado}}', '{{i.notas}}')" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarPersonalModal">
-                                <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
+                        <td>{{i.estado}}</td>
+
+                        <td class="opciones-column">
+                            <button onclick="editarPersonal('{{ i.nit_Cui }}' ,'{{i.nombre}}', '{{i.correoElectronico}}', '{{i.direccion}}', '{{i.notas}}', '{{i.estado}}')" class="btn btn-outline-primary btn-sm mb-1"  data-toggle="modal" href="#EditarPersonalModal" title="Editar">
+                                <i class="fas fa-edit"></i>
                             </button>                            
 
-                            <button onclick="eliminarPersonal('{{i.nit_Cui}}')" class="btn btn-dark-outline btn-sm"
-                                data-toggle="modal" href="#EliminarPersonalModal"><img
-                                    src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
+                            <button onclick="eliminarPersonal('{{i.nit_Cui}}')" class="btn btn-outline-danger btn-sm" data-toggle="modal" href="#EliminarPersonalModal" title="Eliminar">
+                                <i class="fas fa-power-off"></i>
+                            </button>
                         </td>
                     </tr>
                     {% endfor %}

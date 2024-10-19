@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% load static %}
@@ -6,9 +5,14 @@
 
 {% block content %}
 
-<!--<link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
-<script src="{% static 'index/js/b4.js' %}"></script>-->
+<link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
+<script>const usuariosUrl = "{% url 'Usuarios' %}";</script>
+<script src="{% static 'index/js/b4.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{% static 'index/css/sweetalert2-custom.css' %}">
+<script src="{% static 'index/js/script.js' %}"></script>
+<script src="{% static 'index/js/alerta.js' %}"></script>
+
 
 
 <div id="AgregarUsuarioModal" class="modal" style="overflow: scroll;">
@@ -32,10 +36,11 @@
                     {% endfor %}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <button type="button" class="btn btn-danger btn-sm" id="cancelarBtn" onclick="mostrarAlertaCancelar()">
                     Cancelar
                 </button>
-                <button type="submit" class="btn btn-success">
+
+                <button type="submit" class="btn btn-success btn-sm">
                     Agregar
                 </button>
             </div>
@@ -45,61 +50,69 @@
 </div>
 
 
+
 <div id="EditarUsuarioModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-dark">Editar</h5>
+                <h5 class="modal-title text-dark">Editar Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body bg-dark text-white">
-                <form method="POST" action="{% url 'EditCliente' %}" enctype="multipart/form-data">{% csrf_token %}
-                    <input type="hidden" name="id_personal_editar" id="id_personal_editar">
+                <form method="POST" action="{% url 'EditUsuario' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="dpi_usuario_editar" id="dpi_usuario_editar">
                     {% for field in form_editar %}
-                    <p> {{field.label}} <br>
-                        {{field|add_class:"form-control"}}</p>
-                    {% for error in field.errors %}
-                    <p class="alarma">{{error}}</p>
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                            {% endfor %}
+                        </div>
                     {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                    <p class="alarma">{{error}}</p>
-                    {% endfor %}
-                    <p>
-                        <label for="estado_editar">Estado:</label>
-                        <input type="checkbox" id="estado_editar" name="estado_editar">
-                    </p>
-                    
-            </div>
-            <div class="modal-footer bg-dark text-white">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                   Volver
-                </button>
-                <button type="submit" class="btn btn-success">
-                    Aceptar
-                </button>
-                </form>
-            </div>
+                    {% if form_editar.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form_editar.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer bg-dark text-white">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<div id="EliminarUsuarioModal" class="modal">
+<div id="ToggleUsuarioModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-dark">Eliminar</h5>
+                <h5 class="modal-title text-dark">Cambiar Estado de Usuario</h5>
             </div>
             <div class="modal-body bg-dark text-white">
-                <p class="labelmodal">¿Estás seguro?</p>
-                <form method="POST" action="{% url 'DeleteCliente' %}">{% csrf_token %}
-                    <input type="hidden" id="id_personal_eliminar" name="id_personal_eliminar">
+                <p class="labelmodal">¿Estás seguro que deseas cambiar el estado de este usuario?</p>
+                <form id="form_toggle_estado" method="POST" action="{% url 'ActivarDesactivar' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="dpi_usuario_toggle" name="dpi" value="">
+                    <input type="hidden" id="nuevo_estado_usuario" name="nuevo_estado" value="">
             </div>
             <div class="modal-footer bg-dark text-white">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                   Volver
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                   Cancelar
                 </button>
-                <button type="submit" class="btn btn-success">
-                    Aceptar
+                <button type="submit" class="btn btn-primary" id="btn_confirmar_toggle">
+                    Confirmar
                 </button>
                 </form>
             </div>
@@ -107,12 +120,12 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-md-12">
-        <h3 class="text-center">Usuarios   <i class="fas fa-users"></i></h3>
+        <h3 class="text-center">Usuarios <i class="fas fa-users"></i></h3>
         <div class="col-md-3 pb-2">
-            <a href="#AgregarUsuarioModal"
-                data-toggle="modal" data-dismiss="modal">
+            <a href="#AgregarUsuarioModal" data-toggle="modal" data-dismiss="modal">
                 <button type="button" class="btn btn-success">
                     Agregar Usuario
                     <i class="fas fa-plus-circle"></i>
@@ -127,9 +140,9 @@
                         <th>DPI</th>
                         <th>Nombre</th>
                         <th>Correo Electrónico</th>
-                        <th>Notas</th>
                         <th>Fecha de Ingreso</th>
                         <th>Cargo</th>
+                        <th>Notas</th>
                         <th>Estado</th>
                         <th>Opciones</th>
                     </tr>
@@ -137,34 +150,35 @@
                 <tbody class="text-dark">
                     {% for usuario in usuarios %}
                     <tr>
-                        <td>{{forloop.counter }}</td>
-                        <td>{{usuario.dpi }}</td>
-                        <td>{{usuario.nombre }}</td>
-                        <td>{{usuario.correoElectronico }}</td>
-                        <td>{{usuario.notas }}</td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ usuario.dpi }}</td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.correoElectronico }}</td>
                         <td>
                             {% if usuario.fecha_ingreso %}
-                            {{usuario.fecha_ingreso|date:"d/m/Y"}}
+                                {{ usuario.fecha_ingreso|date:"d/m/Y" }}
                             {% else %}
                                 - -
                             {% endif %}
                         </td>
-
-                        <td>{{usuario.rol }}</td>
-                        <td>{{usuario.estado }}</td>
-                        <td> </td>
-                            <button onclick="editarPersonal()" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarUsuarioModal">
-                                <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
-                            </button>                            
-
-                            <button onclick="eliminarPersonal()" class="btn btn-dark-outline btn-sm"
-                                data-toggle="modal" href="#EliminarUsuarioModal"><img
-                                    src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
+                        <td>{{ usuario.rol }}</td>
+                        <td>{{ usuario.notas }}</td>
+                        <td>{{ usuario.estado }}</td>
+                        <td class="opciones-column">
+                            <button onclick="editarUsuario('{{ usuario.dpi }}', '{{ usuario.nombre }}', '{{ usuario.correoElectronico }}', '{{ usuario.rol }}', '{{ usuario.notas }}')" 
+                                class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="toggleEstadoUsuario('{{ usuario.dpi }}', '{{ usuario.estado }}')" 
+                                class="btn btn-outline-{% if usuario.estado == 'activo' %}danger{% else %}success{% endif %} btn-sm" 
+                                title="Activar/Desactivar">
+                                <i class="fas fa-power-off"></i>
+                            </button>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8">No hay usuarios disponibles.</td>
+                        <td colspan="9">No hay usuarios disponibles.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -172,14 +186,12 @@
         </div>
     </div>
 </div>
+
+
 {% if messages %}
     {% for message in messages %}
         <script>
-            Swal.fire({
-                icon: "{{ message.tags }}",  
-                title: "{{ message.tags|capfirst }}", 
-                text: "{{ message }}",
-            });
+            mostrarMensaje("{{ message.tags }}", "{{ message.tags|capfirst }}", "{{ message }}");
         </script>
     {% endfor %}
 {% endif %}

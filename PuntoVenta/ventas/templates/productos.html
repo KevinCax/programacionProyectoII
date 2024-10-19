@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% load static %}
@@ -5,8 +6,8 @@
 
 {% block content %}
 
-<!--<link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
-<script src="{% static 'index/js/b4.js' %}"></script>-->
+<link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
+<script src="{% static 'index/js/b4.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -21,6 +22,7 @@
                     {% for field in form_producto %}
                     <p>{{field.label}} <br>
                         {{field|add_class:"form-control text-dark"}}</p>
+                        
                     {% for error in field.errors %}
                     <p class="alarma">{{error}}</p>
                     {% endfor %}
@@ -42,6 +44,7 @@
     </div>
 </div>
 
+
 <div id="EditarProductoModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -50,7 +53,7 @@
             </div>
             <div class="modal-body bg-dark text-white">
                 <form method="POST" action="{% url 'EditProducto' %}" enctype="multipart/form-data">{% csrf_token %}
-                    <input type="hidden" id="id_producto_editar" name="id_producto_editar">
+                    <input type="hidden" name="id_producto_editar"" id="id_producto_editar"">
                     {% for field in form_editar %}
                     <p> {{field.label}} <br>
                         {{field|add_class:"form-control"}}</p>
@@ -61,13 +64,14 @@
                     {% for error in form.non_field_errors %}
                     <p class="alarma">{{error}}</p>
                     {% endfor %}
+                    
             </div>
             <div class="modal-footer bg-dark text-white">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
                    Volver
                 </button>
                 <button type="submit" class="btn btn-success">
-                    Aceptar
+                    Guardar Cambios
                 </button>
                 </form>
             </div>
@@ -142,13 +146,14 @@
                         <td></td>
                         {% endif %}
                         <td>
-                            <button onclick="editarProducto('{{i.codigo}}', '{{i.cantidad}}', '{{i.descripcion}}', '{{i.categoria}}', '{{i.precio_unitario}}', '{{i.costo_unitario}}', '{{i.imagen}}')" class="btn btn-dark-outline btn-sm" data-toggle="modal" href="#EditarProductoModal">
-                                <img src="{% static 'index/img/editar.png' %}" alt="Error" width="30">
+                            <button onclick="editarProducto('{{i.codigo}}', '{{i.cantidad}}', '{{i.descripcion}}', '{{i.categoria}}', '{{i.precio_unitario}}', '{{i.costo_unitario}}', '{{i.imagen}}')" class="btn btn-outline-primary btn-sm mb-1" data-toggle="modal" href="#EditarProductoModal" title="Editar">
+                                <i class="fas fa-edit"></i>
                             </button>
 
-                            <button onclick="eliminarProducto('{{i.codigo}}')" class="btn btn-dark-outline btn-sm"
-                                data-toggle="modal" href="#EliminarProductoModal"><img
-                                    src="{% static 'index/img/delete.png' %}" alt="Error" width="30"></button>
+                            <button onclick="eliminarProducto('{{i.codigo}}')" class="btn btn-outline-danger btn-sm"
+                                data-toggle="modal" href="#EliminarProductoModal" title="Eliminar"> 
+                                <i class="fas fa-power-off"></i>
+                            </button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -161,10 +166,10 @@
     {% for message in messages %}
         <script>
             Swal.fire({
-                icon: 'error',
-                title: 'Error...',
-                text: "{{message}}",
-            })
+                icon: "{{ message.tags }}",  
+                title: "{{ message.tags|capfirst }}", 
+                text: "{{ message }}",
+            });
         </script>
     {% endfor %}
 {% endif %}

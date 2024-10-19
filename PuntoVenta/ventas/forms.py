@@ -1,5 +1,10 @@
 from django import forms
 import re
+import datetime
+from django.utils import timezone
+from django.contrib import messages
+
+from .utils import validar_dpi
 from .models import Cliente, Producto, Usuario
 from django.core.exceptions import ValidationError
 
@@ -122,6 +127,12 @@ class AddUsuarioForm(forms.ModelForm):
             'rol': 'Cargo: ',
             'estado': 'Estado: ',
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(AddUsuarioForm, self).__init__(*args, **kwargs)
+        # Establece la fecha y hora actual como valor por defecto
+        self.fields['fecha_ingreso'].initial = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
+        
 
     # Validar que el nombre contenga al menos dos palabras
     def clean_nombre(self):
@@ -144,6 +155,43 @@ class AddUsuarioForm(forms.ModelForm):
         if not re.match(pattern, correo):
             raise ValidationError("El correo electrónico no es válido.")
         return correo
+    
+    def clean_clave(self):
+        clave = self.cleaned_data.get('clave')
+        if not clave:
+            raise ValidationError("La clave es obligatoria.")
+        
+        if len(clave) < 6 or len(clave) > 13:
+            raise ValidationError("La clave debe tener entre 6 y 13 caracteres.")
+        
+        if ' ' in clave:
+            raise ValidationError("La clave no puede contener espacios en blanco.")
+        
+        if not re.search(r'\d', clave):
+            raise ValidationError("La clave debe contener al menos un número.")
+        
+        if not re.search(r'[a-z]', clave):
+            raise ValidationError("La clave debe contener al menos una letra minúscula.")
+        
+        if not re.search(r'[A-Z]', clave):
+            raise ValidationError("La clave debe contener al menos una letra mayúscula.")
+        
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', clave):
+            raise ValidationError("La clave debe contener al menos un carácter especial.")
+        
+        return clave
+    
+    def clean_fecha_ingreso(self):
+        fecha_ingreso = self.cleaned_data.get('fecha_ingreso')
+        if fecha_ingreso:
+            # Asegúrate de que fecha_ingreso sea aware
+            if timezone.is_naive(fecha_ingreso):
+                fecha_ingreso = timezone.make_aware(fecha_ingreso)
+
+            # Compara con la fecha y hora actual
+            if fecha_ingreso > timezone.now():
+                raise ValidationError("La fecha de ingreso no puede ser en el futuro.")
+        return fecha_ingreso
 
     # Validar que las contraseñas coincidan
     def clean(self):
@@ -153,3 +201,45 @@ class AddUsuarioForm(forms.ModelForm):
         
         if clave and confirmar_clave and clave != confirmar_clave:
             raise ValidationError("Las contraseñas no coinciden.")
+
+    # Método para mostrar alertas
+    def handle_validation_errors(self):
+        if self.errors:
+            for field, errors in self.errors.items():
+                for error in errors:
+                    messages.error(self.request, error) 
+        
+class EditarUsuarioForm(forms.ModelForm):
+    ROL_CHOICES = [
+        ('Vendedor', 'Vendedor'),
+        ('Recepcionista', 'Recepcionista'),
+        ('Supervisor', 'Supervisor'),
+        ('Administrador', 'Administrador'),
+    ]
+
+    rol = forms.ChoiceField(
+        choices=ROL_CHOICES, 
+        initial='Vendedor',
+        widget=forms.Select(attrs={'id': 'rol_editar', 'class': 'form-control'})
+    )
+    
+    class Meta:
+        model = Usuario
+        fields = ('nombre', 'correoElectronico', 'rol', 'notas')
+        labels = {
+            'nombre': 'Nombre:',
+            'correoElectronico': 'Correo Electrónico:',
+            'rol': 'Cargo:',
+            'notas': 'Notas:',
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'type': 'text', 'id': 'nombre_editar', 'class': 'form-control'}),
+            'correoElectronico': forms.EmailInput(attrs={'id': 'correo_editar', 'class': 'form-control'}),
+            'notas': forms.Textarea(attrs={'id': 'notas_editar', 'class': 'form-control', 'rows': 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            if 'class' not in self.fields[field].widget.attrs:
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
