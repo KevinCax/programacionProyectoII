@@ -93,7 +93,22 @@ function eliminarProducto(id) {
   document.getElementById("id_producto_eliminar").value = id;
 }
 
+function seleccionarCliente(nit, nombre, correo) {
+  
+  document.getElementById('nit_Cui').value = nit;
+  document.getElementById('nombre').value = nombre;
+  document.getElementById('correoElectronico').value = correo;
 
+  // Asegúrate de que el modal se cierre correctamente
+  $('#ClientesModal').modal('hide');
+  
+  // Opcional: Puedes agregar un mensaje de confirmación si es necesario
+  Swal.fire({
+      icon: 'success',
+      title: 'Cliente Seleccionado',
+      text: 'Has seleccionado a ' + nombre,
+  });
+}
 
 function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado) {
   document.getElementById("id_personal_editar").value = id;
@@ -116,6 +131,23 @@ function borrarContent(){
   document.getElementById("search").value = "";
 }
 
+function generarCodigo() {
+  fetch('/ruta/a/tu/vista/generar_codigo/')  // Cambia esta ruta a la que corresponda
+      .then(response => response.json())
+      .then(data => {
+          if (data.codigo) {
+              document.getElementById('id_codigo').value = data.codigo;  // Asegúrate de que el ID coincida con el campo del formulario
+          } else {
+              alert('Error al generar el código.');
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Error al generar el código.');
+      });
+}
+
+
 function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
   document.getElementById("id_producto_editar").value = id;
   document.getElementById("cantidad_editar").value = cantidad;
@@ -126,10 +158,7 @@ function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, c
   document.getElementById("imagen_editar").value = imagen;
 }
 
-/*function seleccionarCliente(id, nombre){
- document.getElementById("id_cliente").value = id;
- document.getElementById("cliente").value = nombre;
-}*/
+
 
 function editarUsuario(dpi, nombre, correoElectronico, rol, notas) {
   // Establecer los valores en el formulario

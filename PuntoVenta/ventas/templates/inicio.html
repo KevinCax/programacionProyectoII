@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Shop</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index/css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Bienvenido a Digital Shop</h1>
+    <p>¿Qué quieres hacer hoy?</p>
+    <div class="button-container">
+        <a href="{% url 'IniciarSesion' %}" class="btn">Iniciar Sesión</a>
+        <a href="{% url 'CrearCuenta' %}" class="btn">Crear Cuenta</a>
+    </div>
+</body>
+</html>

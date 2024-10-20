@@ -120,12 +120,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'ventas/static'),
 ]
 
 MEDIA_URL = 'media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = ' '  # Cambia esto a la URL de tu página de inicio de sesión
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

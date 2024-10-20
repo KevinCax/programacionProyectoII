@@ -10,17 +10,26 @@ from weasyprint.text.fonts import FontConfiguration
 from django.conf import settings
 import os
 from django.db import IntegrityError
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 
 
 # Vistas Clientes.
 
-def ventas_view(request):
-    num_ventas = 156
-    context = {
-        'num_ventas': num_ventas
-    }
-    return render(request, 'ventas.html', context)
+def inicio_view(request):
+    
+    return render(request, 'inicio.html')
+
+def login_view(request):
+    return render(request, 'signin.html')
+
+def logout_view(request):
+    return render(request, 'logout.html')
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('Inicio') 
 
 def clientes_view(request):
     clientes = Cliente.objects.all()
@@ -218,7 +227,7 @@ def delete_producto_view(request):
 # Vista Venta
 
 class add_ventas(ListView):
-    template_name = 'add_ventas.html'
+    template_name = 'ventas.html'
     model = Egreso
 
     def dispatch(self,request,*args,**kwargs):
@@ -248,9 +257,8 @@ class add_ventas(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context ["productos_lista"] = Producto.objects.all()
-        context ["clientes_lista"] = Cliente.objects.all()
-        
+        context["productos_lista"] = Producto.objects.all()
+        context["clientes_lista"] = Cliente.objects.all()
         return context
     
 def export_pdf_view(request, id, iva):
@@ -390,3 +398,4 @@ def toggle_usuario_estado(request):
         messages.error(request, "Método no permitido")
     
     return redirect('Usuarios')
+

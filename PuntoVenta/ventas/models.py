@@ -1,6 +1,8 @@
+from typing import Iterable
 from django.db import models
 from django.forms import model_to_dict
 from django.utils import timezone
+from .utils import generar_usuario
 
 # Create your models here.
 class Cliente(models.Model):
@@ -103,13 +105,19 @@ class Usuario(models.Model):
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='activo')
     is_active = models.BooleanField(default=True)
     
+    # Nuevo campo para el nombre de usuario
+    usuario = models.CharField(max_length=200, unique=True, blank=True, null=True)
+
     class Meta:
         verbose_name = 'usuarios'
         verbose_name_plural = 'usuarios'
         
     def __str__(self):
         return self.nombre
-
+    
+    def save(self, *args, **kwargs):
+        if not self.usuario and self.nombre:
+            self.usuario = generar_usuario(self.nombre)
+        super().save(*args, **kwargs)
 
 usuarios_activos = Usuario.objects.filter(estado='activo')
-

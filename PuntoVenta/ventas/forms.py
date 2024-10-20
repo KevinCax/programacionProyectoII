@@ -3,8 +3,7 @@ import re
 import datetime
 from django.utils import timezone
 from django.contrib import messages
-
-from .utils import validar_dpi
+from .utils import generar_usuario
 from .models import Cliente, Producto, Usuario
 from django.core.exceptions import ValidationError
 
@@ -65,7 +64,7 @@ class EditarClienteForm(forms.ModelForm):
 class AddProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ('codigo', 'cantidad', 'descripcion', 'categoria', 'precio_unitario','costo_unitario','imagen')
+        fields = ('codigo', 'cantidad', 'descripcion', 'categoria', 'precio_unitario', 'costo_unitario', 'imagen')
         labels = {
             'codigo': 'Cód. Producto: ',
             'cantidad': 'Cantidad: ',
@@ -75,7 +74,8 @@ class AddProductoForm(forms.ModelForm):
             'costo_unitario': 'Costo U. GTQ : ',
             'imagen': 'Imagen :',
         }
-        
+
+
 class EditarProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
@@ -132,6 +132,14 @@ class AddUsuarioForm(forms.ModelForm):
         super(AddUsuarioForm, self).__init__(*args, **kwargs)
         # Establece la fecha y hora actual como valor por defecto
         self.fields['fecha_ingreso'].initial = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
+        
+        
+    def save(self, commit=True):
+        usuario = super().save(commit=False)
+        usuario.usuario = generar_usuario(usuario.nombre)
+        if commit:
+            usuario.save()
+        return usuario
         
 
     # Validar que el nombre contenga al menos dos palabras
